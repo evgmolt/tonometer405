@@ -1,0 +1,1 @@
+#define ADS1115_ADDR 0x48
