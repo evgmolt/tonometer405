@@ -425,11 +425,6 @@
               <FilePath>..\Core\Src\jWrite.c</FilePath>
             </File>
             <File>
-              <FileName>GSM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\GSM.h</FilePath>
-            </File>
-            <File>
               <FileName>jsmn.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\jsmn.h</FilePath>

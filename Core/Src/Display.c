@@ -126,9 +126,11 @@ void PrintBattCharge(void)
     uint8_t num_of_segments = 6;
     uint16_t batt_level;
 
-    adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
-    delay_1ms(100);        
-    batt_level = adc_value[0] * 3300 / 0xFFF;
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100); // ожидаем окончания преобразования
+    batt_level = HAL_ADC_GetValue(&hadc1); // читаем полученное значение 
+    HAL_ADC_Stop(&hadc1);
+    batt_level = batt_level * 3300 / 0xFFF;
 
     uint8_t buff[5] = {0};
     sprintf(buff, "%04d:", batt_level);
@@ -257,8 +259,10 @@ void TFT_print(void)
     uint16_t batt_level=0;
     uint8_t rang_batt=0;
 
-    adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
-    delay_1ms(100);        
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100); // ожидаем окончания преобразования
+    batt_level = HAL_ADC_GetValue(&hadc1); // читаем полученное значение 
+    HAL_ADC_Stop(&hadc1);
     batt_level=adc_value[0] * 3300 / 0xFFF;
 
     uint8_t buff[20]={0};

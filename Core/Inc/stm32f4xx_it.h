@@ -27,12 +27,16 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stm32f4xx_hal.h"
+#include "stdbool.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+void Calibration();
+void ResetDetector(void);
+bool GetADCData(bool save);
+void Lock(void);
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

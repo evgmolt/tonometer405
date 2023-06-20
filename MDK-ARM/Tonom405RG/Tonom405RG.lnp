@@ -1,6 +1,11 @@
 --cpu=Cortex-M4.fp.sp
 "tonom405rg\startup_stm32f405xx.o"
 "tonom405rg\ili9341.o"
+"tonom405rg\fonts.o"
+"tonom405rg\dataprocessing.o"
+"tonom405rg\display.o"
+"tonom405rg\gsm.o"
+"tonom405rg\jwrite.o"
 "tonom405rg\main.o"
 "tonom405rg\gpio.o"
 "tonom405rg\adc.o"

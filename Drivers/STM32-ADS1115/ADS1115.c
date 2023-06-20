@@ -1,7 +1,9 @@
 #include "ADS1115.h"
 #include "i2c.h"
 
-void InitACD()
+uint16_t ADS1115_value;
+
+void InitADC()
 {
     WriteRegister(REG_HI_THRESH, HI_THRESH);
     WriteRegister(REG_LO_THRESH, LO_THRESH);
@@ -18,12 +20,13 @@ void RequestADC()
   WriteRegister(REG_CONFIG, config);
 }
 
-uint16_t GetValue()
+HAL_StatusTypeDef GetADCValue()
 {
     uint8_t buffer[2];
-    HAL_I2C_Master_Receive(&hi2c1, (ADS1115_ADDRESS << 1), buffer, 2,  I2C_TIMEOUT);
+    HAL_StatusTypeDef hal_result = HAL_I2C_Master_Receive(&hi2c1, (ADS1115_ADDRESS << 1), buffer, 2,  I2C_TIMEOUT);
     uint16_t result = buffer[1];
-    return result << 8 | buffer[0]; //? порядок байт    
+    ADS1115_value = result << 8 | buffer[0]; //? порядок байт    
+    return hal_result;
 }
 
 void WriteRegister(uint8_t registerAddr, uint16_t data)

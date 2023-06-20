@@ -15,8 +15,10 @@
 #define HI_THRESH                   0x8000
 #define LO_THRESH                   0x0000
 
-void InitACD();
+extern uint16_t ADS1115_value;
+
+void InitADC();
 void RequestADC();
-uint16_t GetValue();
+HAL_StatusTypeDef GetADCValue();
 void WriteRegister(uint8_t registerAddr, uint16_t data);
 

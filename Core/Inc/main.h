@@ -27,6 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -278,25 +279,14 @@ void TimeInit(void);
 void ButtonInterruptConfig(void);
 
 void DeviceOff(void);
-void i2cCalibration(void);
+void Calibration(void);
 
-void TimerConfig1(void);
-void NvicConfig1(void);
 
-void TimerConfig2(void);
-void NvicConfig2(void);
-
-void Timer2Start(void);
-void Timer2Stop(void);
-void Timer1Start(void);
-
-short int convert_save_16(void);
 
 uint8_t usb_send_save(int16_t *mass1, int16_t *mass2);
 
 void ClearScreen(void);
 void usb_send_16(short int T1, short int T2);
-short int convert_NO_save(void);
 void ADS1115_config(uint8_t pointer, uint8_t byte1, uint8_t byte2);
 uint8_t ADS1115_read_IT(void);
 void PrintError(uint8_t K);
@@ -404,7 +394,7 @@ extern int16_t XMax;
 extern int16_t current_pressure;
 
 extern int16_t i2c_out;
-extern int i2c_out_K;
+extern int ZeroVal;
 extern uint8_t indicate_charge_toggle;
 extern uint8_t indicate_charge_counter;
 
@@ -424,7 +414,7 @@ extern uint8_t Lo_ADS1115_config;
 
 extern uint8_t mode;
 
-extern uint8_t ble_data_ready;
+extern bool ble_data_ready;
 extern uint8_t ble_buffer_counter;
 extern uint8_t sim800_FLAG;
 extern uint8_t rang_batt_old;

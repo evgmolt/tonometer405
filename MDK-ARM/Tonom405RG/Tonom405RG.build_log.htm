@@ -21,54 +21,29 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
 Dialog DLL:      TCM.DLL V1.56.1.0
  
 <h2>Project:</h2>
-D:\Projects\Tonom405RG\MDK-ARM\Tonom405RG.uvprojx
+D:\Projects\tonom405rg\MDK-ARM\Tonom405RG.uvprojx
 Project File Date:  06/19/2023
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.18', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Tonom405RG'
-../Core/Src/main.c(125): error: redefinition of 'ble_data_ready' with a different type: 'bool' vs 'uint8_t' (aka 'unsigned char')
-bool ble_data_ready = false;
-     ^
-../Core/Inc/main.h(427): note: previous declaration is here
-extern uint8_t ble_data_ready;
-               ^
-../Core/Src/main.c(133): error: unknown type name 'usb_dev'
-usb_dev usbd_cdc;
-^
-2 errors generated.
-compiling main.c...
-compiling gpio.c...
-compiling adc.c...
-compiling ili9341.c...
-compiling GSM.c...
-compiling dma.c...
-compiling iwdg.c...
-compiling i2c.c...
-compiling rtc.c...
-compiling spi.c...
-compiling DataProcessing.c...
-compiling tim.c...
-compiling usb_otg.c...
-compiling usart.c...
-compiling stm32f4xx_it.c...
-compiling stm32f4xx_hal_msp.c...
 compiling ADS1115.c...
-../Core/Src/Display.c(129): error: use of undeclared identifier 'ADC0'
-    adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
-                                ^
-../Core/Src/Display.c(129): error: use of undeclared identifier 'ADC_REGULAR_CHANNEL'
-    adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
-                                      ^
-../Core/Src/Display.c(260): error: use of undeclared identifier 'ADC0'
-    adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
-                                ^
-../Core/Src/Display.c(260): error: use of undeclared identifier 'ADC_REGULAR_CHANNEL'
-    adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
-                                      ^
-4 errors generated.
-compiling Display.c...
-"Tonom405RG\Tonom405RG.axf" - 6 Error(s), 0 Warning(s).
+compiling stm32f4xx_it.c...
+compiling main.c...
+linking...
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol ILI9341_DrawImage (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol ILI9341_FillRectangle (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol ILI9341_WriteString (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol CheckBackupRegister (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol WriteBackupRegister (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol TimeSet (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol rtc_counter_get (referred from display.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol ILI9341_FillScreen (referred from main.o).
+Tonom405RG\Tonom405RG.axf: Error: L6218E: Undefined symbol delay_1ms (referred from main.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 9 error messages.
+"Tonom405RG\Tonom405RG.axf" - 9 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -1,4 +1,4 @@
-//#include "main.h"
+#include "adc.h"
 #include "stm32f4xx_hal.h"
 #include "stdbool.h"
 

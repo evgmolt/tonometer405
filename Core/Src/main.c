@@ -66,16 +66,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern uint8_t wave_detect_flag;
-extern double detect_level;
-extern int16_t silence_time_start;
-extern int16_t puls_buff[50];
-extern uint8_t puls_counter;
-extern double current_max;
-extern int16_t detect_level_start;
-extern uint8_t UART0_buff[200];
-extern uint8_t UART0_count;
-
 uint16_t pulse = 0;
 
 uint32_t *ptrd;
@@ -99,9 +89,6 @@ uint8_t Lo_ADS1115_config = 0b11100100;
 
 uint8_t ADS1115_FLAG=0;
 
-extern const int lo_limit;  
-extern const int hi_limit; 
-
 int16_t PSys = 0;
 int16_t PDia = 0;
 int16_t PMean;
@@ -113,7 +100,7 @@ int indexPDia = 0;
 int16_t XMax;
 int16_t current_pressure=0;
 int16_t i2c_out=0;
-int i2c_out_K=0;
+int ZeroVal=0;
 uint8_t indicate_charge_toggle=1;
 uint8_t indicate_charge_counter=1;
 uint16_t cur_day=13, cur_month=12, cur_year=2022;
@@ -130,7 +117,7 @@ uint8_t i2c_transmitter[16];
 uint8_t i2c_receiver[16];
 uint8_t send_buff[100]={0};
 uint8_t buff097[10]={0};
-usb_dev usbd_cdc;
+//usb_dev usbd_cdc;
 uint16_t adc_value[8];
 uint16_t num_string=0;
 uint16_t count_send_bluetooth=0;
@@ -214,6 +201,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   ILI9341_Init();
   InitADC();
+  HAL_TIM_Base_Start_IT(&htim1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -223,11 +212,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-        fwdgt_counter_reload();
+        HAL_IWDG_Refresh(&hiwdg);
         switch (mode)
         {
             case INIT_START:
-                Timer2Start();
+                HAL_TIM_Base_Start_IT(&htim2);
                 if (!button_pressed) 
                 {
                     mode = START_SCREEN;
@@ -242,7 +231,7 @@ int main(void)
                 TFT_print();
 // Переход в режим зарядки при подключении USB разъема      
 #ifndef DEBUG            
-                if (gpio_input_bit_get(GPIOC, GPIO_PIN_10))
+                if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10))
                 {
                     ILI9341_FillScreen(ILI9341_BLACK);
                     print_battery();
@@ -260,7 +249,7 @@ int main(void)
                     count_send_bluetooth=0;
                 
                     current_pressure=0;
-                    i2cCalibration();
+                    Calibration();
                     PUMP_ON;
                     VALVE_FAST_CLOSE;
                     VALVE_SLOW_CLOSE;
@@ -312,14 +301,14 @@ int main(void)
                 break;
             case USB_CHARGING:
                 shutdown_counter = 0;
-                if (gpio_input_bit_get(GPIOB, GPIO_PIN_8)==0) indicate_charge_toggle=1; //Не работает
+                if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)==0) indicate_charge_toggle=1; //Не работает
                 PrintBattCharge();                
                 delay_1ms(1500);                
-                if (gpio_input_bit_get(GPIOC, GPIO_PIN_10)==0) DeviceOff();                        
+                if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10)==0) DeviceOff();                        
                 break;
             case PRESSURE_TEST:
                 shutdown_counter = 0;
-                convert_NO_save();
+                GetADCData(false);
                 PrintNum(current_pressure, BIG_NUM_RIGHT, DIA_TOP, GREEN);
                 if (allow_send_data == 1) usb_send_16(i2c_out,0);
                 delay_1ms(200);
@@ -463,14 +452,14 @@ int main(void)
             erase_heart = false;
         }
                     
-        if (0U == cdc_acm_check_ready(&usbd_cdc)) 
+/*        if (0U == cdc_acm_check_ready(&usbd_cdc)) 
         {
             cdc_acm_data_receive(&usbd_cdc);
         } 
         else 
         {
             cdc_acm_data_send(&usbd_cdc);
-        }            
+        }            */
   }
   /* USER CODE END 3 */
 }
@@ -524,6 +513,216 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+uint8_t BLECommandsReceiver(uint8_t *buff)
+{
+    const uint8_t top = 20;
+    const uint8_t left = 20;
+    const uint8_t step = 35;
+    uint8_t timestr[20]={0};
+    
+    if (get_number_mode) 
+    {
+        get_number_mode = 0;
+        for (int i = 0; i < UART0_count; i++)
+        {
+            SERIAL[i] = buff[i];
+        }
+        SERIAL[UART0_count - 1] = 0;
+        UART0_count = 0;
+        return 0;
+    }
+
+    for (int i = 0; i < UART0_count; i++)
+    {
+        checksum += buff[i];
+        switch (byte_num)
+        {
+            case 0:
+                if (buff[i] == '0') byte_num = 1;
+                checksum = buff[i];
+                index_in_packet = 0;
+                break;
+            case 1:
+                if (buff[i] == '2') byte_num = 2;
+                break;
+            case 2:
+                command = buff[i];
+                byte_num = 3;
+                break;
+            case 3:
+                num_of_packet = buff[i];
+                current_packet_num++;
+                byte_num = 4;
+                break;
+            case 4:
+                byte_num = 5;
+                break;
+        }
+        if (byte_num == 5)
+        {
+            send_buff[result_index] = buff[i];
+            result_index++;
+            if (command == BLE_CMD_SERIAL) 
+            {
+                if (result_index == 7) //длина номера без '0' и '2'
+                {
+                    if (checksum == buff[i + 1])
+                    {
+                        for (uint8_t j = 0; j < 7; j++)
+                        {
+                            SERIAL[j + 2] = send_buff[j];
+                        }
+//                        FmcSerialSendAT();                        
+                        delay_1ms(200);                                    
+                        DeviceOff();
+                    }
+                }
+            }
+            if (command == BLE_CMD_DATETIME)
+            {
+                if (result_index == 6) //длина буфера
+                {
+                    if (checksum == buff[i + 2])
+                    {
+                        cur_year = send_buff[0];
+                        cur_month = send_buff[1];
+                        cur_day = send_buff[2];
+                        cur_thh = send_buff[3];
+                        cur_tmm = send_buff[4];
+                        cur_tss = send_buff[5];
+                        TimeSet((uint32_t)cur_thh, (uint32_t)cur_tmm, (uint32_t)cur_tss);
+                        WriteBackupRegister((uint16_t)cur_day, (uint16_t)cur_month, (uint16_t)cur_year);
+                        sprintf(timestr, "%02d:%02d:%02d  %02d.%02d.20%d", cur_thh, cur_tmm, cur_tss, cur_day, cur_month, cur_year);
+                        ILI9341_WriteString(TIME_LEFT, TIME_TOP, timestr, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
+                        ResetBLEReceiver();
+                        UART0_count = 0;
+                        return 1;
+                    }
+                }                
+            }
+            if (command >= BLE_CMD_SETURL && command <= BLE_CMD_SETID)
+            {
+                if (index_in_packet == BLE_PACKET_SIZE - 2)
+                {
+                    index_in_packet = 0;
+                    byte_num = 0;
+                }
+                if (buff[i] == 0)
+                {
+                    if (checksum == buff[i + 1])
+                    {
+                        ILI9341_WriteString(left, step / 2 + (command - 6) * step, send_buff, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
+                        ResetBLEReceiver();
+                    }
+                }
+            }
+            if (command >= BLE_CMD_GETURL && command <= BLE_CMD_GETID)
+            {
+                if (buff[i + 1] == checksum) 
+                {
+                    sprintf(send_buff,"Something");
+                    send_buf_UART_0(send_buff, 10);
+                    ResetBLEReceiver();
+                }
+            }
+        }
+        index_in_packet++;
+    }
+    UART0_count = 0;
+}
+
+void ResetBLEReceiver()
+{
+    checksum = 0;
+    byte_num = 0;
+    index_in_packet = 0;
+    current_packet_num = 0;
+    result_index = 0;
+}
+
+void SendMeasurementResult(uint8_t c_day, uint8_t c_month, uint8_t c_year, uint8_t c_ss, uint8_t c_mm, uint8_t c_hh, int16_t sis, int16_t dia, int16_t pressure, int16_t bonus)
+{
+    uint8_t cur_buff[13]={'0','2', 0x01, c_day, c_month, c_year, c_ss, c_mm, c_hh, sis, dia, pressure, bonus};        
+    uint8_t c_summ=0;        
+    for (int q = 0; q < 13; q++)
+    {
+       c_summ += cur_buff[q];
+    }            
+    cur_buff[13] = c_summ;
+    send_buf_UART_0(cur_buff, 14);
+}
+
+void SendATCommand()
+{
+    uint8_t len;
+    uint8_t buff[50] = {0};
+    sprintf(buff, "AT+RESULT=%02d.%02d.%02d_%02d:%02d:%d,%d,%d,%d,%d,%d\n", 5, 4, 2023, 8, 5, 30, PSys, PDia, PMean, pulse, status_byte);
+    len = strlen(buff);
+    send_buf_UART_0(buff, len);
+}
+
+void send_buf_UART_0(uint8_t *buf, uint8_t num) //Передача данных по BLE
+{
+    for(int j1=0; j1 < num; j1++)
+    {
+//        usart_data_transmit(USART0, (uint8_t)buf[j1]);
+//        while(RESET == usart_flag_get(USART0, USART_FLAG_TBE));            
+    }
+}
+
+void send_buf_UART_1(uint8_t *buf, uint8_t num)
+{
+    for(int j1=0;j1<num;j1++)
+    {
+//        usart_data_transmit(USART1, (uint8_t)buf[j1]);
+//        while(RESET == usart_flag_get(USART1, USART_FLAG_TBE));            
+    }
+}
+
+void StopPumping()
+{
+    ResetDetector();
+    puls_counter=0;      
+    stop_meas = false;
+    PUMP_OFF;
+    VALVE_SLOW_OPEN;
+    count_send_bluetooth = 0;
+    mode = MEASUREMENT;        
+}
+
+void AbortMeas(void) 
+{
+    PUMP_OFF;
+    VALVE_FAST_OPEN;
+    VALVE_SLOW_OPEN;
+    button_released = 0;
+    button_pressed_counter = 0;
+    mode = START_SCREEN;
+    PrintNum(0, BIG_NUM_RIGHT, DIA_TOP, GREEN);
+}
+
+void usb_send_16(short int T1, short int T2)
+{
+    uint8_t send_H1 = (T1 >> 8) & 0xFF;
+    uint8_t send_L1 = T1 & 0xFF;
+    uint8_t send_H2 = (T2 >> 8) & 0xFF;
+    uint8_t send_L2 = T2 & 0xFF;
+    uint8_t send_buff[5] = {25, send_L1, send_H1, send_L2, send_H2};
+//    usbd_ep_send (&usbd_cdc, CDC_IN_EP, send_buff, 5);
+}
+
+void DeviceOff(void)
+{
+    PUMP_OFF;
+    VALVE_FAST_OPEN;
+    VALVE_SLOW_OPEN;
+    ILI9341_FillScreen(ILI9341_BLACK);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, GPIO_PIN_RESET);
+}
+
+void BluetoothCheck()
+{
+}
 
 /* USER CODE END 4 */
 
