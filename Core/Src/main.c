@@ -241,7 +241,7 @@ int main(void)
                 if (button_released) 
                 {
                     view_time = 0;
-                    send_buf_UART_1("AT\r", 3);            
+                    HAL_UART_Transmit_IT(&huart2, "AT\r", 3);
                     
                     ILI9341_FillRectangle(0, 0, 240, 280, ILI9341_WHITE);                            
                     ILI9341_FillRectangle(100, 270, 140, 50, ILI9341_WHITE);                        
@@ -357,7 +357,7 @@ int main(void)
                             c_summ+=cur_buff_ble[f];
                         }
                         cur_buff_ble[BLE_PACKET_SIZE * 2 + 6] = c_summ;
-                        send_buf_UART_0(cur_buff_ble, BLE_PACKET_SIZE * 2 + 6 + 1);
+                        HAL_UART_Transmit_IT(&huart1, cur_buff_ble, BLE_PACKET_SIZE * 2 + 6 + 1);
                         count_send_bluetooth++;
                     }
                 }
@@ -621,7 +621,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                 if (buff[i + 1] == checksum) 
                 {
                     sprintf(send_buff,"Something");
-                    send_buf_UART_0(send_buff, 10);
+                    HAL_UART_Transmit_IT(&huart1, send_buff, 10);
                     ResetBLEReceiver();
                 }
             }
@@ -649,7 +649,7 @@ void SendMeasurementResult(uint8_t c_day, uint8_t c_month, uint8_t c_year, uint8
        c_summ += cur_buff[q];
     }            
     cur_buff[13] = c_summ;
-    send_buf_UART_0(cur_buff, 14);
+    HAL_UART_Transmit_IT(&huart1, cur_buff, 14);
 }
 
 void SendATCommand()
@@ -658,25 +658,7 @@ void SendATCommand()
     uint8_t buff[50] = {0};
     sprintf(buff, "AT+RESULT=%02d.%02d.%02d_%02d:%02d:%d,%d,%d,%d,%d,%d\n", 5, 4, 2023, 8, 5, 30, PSys, PDia, PMean, pulse, status_byte);
     len = strlen(buff);
-    send_buf_UART_0(buff, len);
-}
-
-void send_buf_UART_0(uint8_t *buf, uint8_t num) //Передача данных по BLE
-{
-    for(int j1=0; j1 < num; j1++)
-    {
-//        usart_data_transmit(USART0, (uint8_t)buf[j1]);
-//        while(RESET == usart_flag_get(USART0, USART_FLAG_TBE));            
-    }
-}
-
-void send_buf_UART_1(uint8_t *buf, uint8_t num)
-{
-    for(int j1=0;j1<num;j1++)
-    {
-//        usart_data_transmit(USART1, (uint8_t)buf[j1]);
-//        while(RESET == usart_flag_get(USART1, USART_FLAG_TBE));            
-    }
+    HAL_UART_Transmit_IT(&huart1, buff, len);
 }
 
 void StopPumping()

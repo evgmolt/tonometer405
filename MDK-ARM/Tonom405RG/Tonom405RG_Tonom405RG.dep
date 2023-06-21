@@ -1,59 +1,11 @@
 Dependencies for Project 'Tonom405RG', Target 'Tonom405RG': (DO NOT MODIFY !)
 CompilerVersion: 6180000::V6.18::ARMCLANG
-F (startup_stm32f405xx.s)(0x649024A4)(--target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -masm=auto -c-gdwarf-4-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 537" -Wa,armasm,--pd,"_RTE_ SETA 1" -Wa,armasm,--pd,"STM32F405xx SETA 1" -Wa,armasm,--pd,"_RTE_ SETA 1"-o tonom405rg/startup_stm32f405xx.o)
-F (..\Core\Src\ili9341.c)(0x648AA2C8)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/ili9341.o -MD)
-I (..\Core\Inc\ili9341.h)(0x64901AFC)
-I (..\Core\Inc\main.h)(0x64914752)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
-I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x647DD1BC)
-I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x647DD18B)
-I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x647DD18B)
-I (..\Drivers\CMSIS\Include\core_cm4.h)(0x647DD18E)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x62529918)
-I (..\Drivers\CMSIS\Include\cmsis_version.h)(0x647DD18E)
-I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x647DD18E)
-I (..\Drivers\CMSIS\Include\cmsis_armclang.h)(0x647DD18E)
-I (C:\Keil_v5\ARM\ARMCLANG\include\arm_compat.h)(0x62529916)
-I (C:\Keil_v5\ARM\ARMCLANG\include\arm_acle.h)(0x62529916)
-I (..\Drivers\CMSIS\Include\mpu_armv7.h)(0x647DD18E)
-I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x647DD18B)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h)(0x647DD1BC)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stddef.h)(0x62529916)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_exti.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_adc.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
-I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
-I (..\Core\Inc\fonts.h)(0x644610FD)
+F (startup_stm32f405xx.s)(0x64917ED4)(--target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -masm=auto -c-gdwarf-4-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 537" -Wa,armasm,--pd,"_RTE_ SETA 1" -Wa,armasm,--pd,"STM32F405xx SETA 1" -Wa,armasm,--pd,"_RTE_ SETA 1"-o tonom405rg/startup_stm32f405xx.o)
 F (..\Core\Src\fonts.c)(0x644610FD)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/fonts.o -MD)
 I (..\Core\Inc\fonts.h)(0x644610FD)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x62529918)
 F (..\Core\Src\DataProcessing.c)(0x645384BE)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/dataprocessing.o -MD)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -100,7 +52,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 I (..\Core\Inc\DataProcessing.h)(0x64901547)
 F (..\Core\Src\Display.c)(0x64903963)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/display.o -MD)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -149,8 +101,9 @@ I (..\Core\Inc\Display.h)(0x64902A09)
 I (..\Core\Inc\adc.h)(0x6482C7EF)
 I (..\Img\bat_dif_7_22.h)(0x63BE8BED)
 I (..\Img\bat_clr_44_24.h)(0x63BE8BED)
-I (..\Core\Inc\ili9341.h)(0x64901AFC)
+I (..\Core\Inc\ili9341.h)(0x64929B2B)
 I (..\Core\Inc\fonts.h)(0x644610FD)
+I (..\Core\Inc\spi.h)(0x648A9F94)
 I (..\Img\text_H_GREEN.h)(0x63BE8BED)
 I (..\Img\text_H_RED.h)(0x63BE8BED)
 I (..\Img\text_H_YELLOW.h)(0x63BE8BED)
@@ -164,7 +117,7 @@ I (..\Img\DIA_45_35.h)(0x63BE8BED)
 F (..\Core\Src\GSM.c)(0x644610FD)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/gsm.o -MD)
 I (..\Core\Inc\GSM.h)(0x644610FD)
 I (..\Core\Inc\jWrite.h)(0x644610FD)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -216,8 +169,8 @@ I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x62529916)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x62529916)
 I (..\Core\Inc\jWrite.h)(0x644610FD)
 F (..\Core\Inc\jsmn.h)(0x644610FD)()
-F (../Core/Src/main.c)(0x64916587)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/main.o -MD)
-I (..\Core\Inc\main.h)(0x64914752)
+F (../Core/Src/main.c)(0x64929377)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/main.o -MD)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -272,14 +225,14 @@ I (..\Core\Inc\tim.h)(0x64883700)
 I (..\Core\Inc\usart.h)(0x648AA71D)
 I (..\Core\Inc\usb_otg.h)(0x648AA71D)
 I (..\Core\Inc\gpio.h)(0x647EDEEE)
-I (..\Core\Inc\ili9341.h)(0x64901AFC)
+I (..\Core\Inc\ili9341.h)(0x64929B2B)
 I (..\Core\Inc\fonts.h)(0x644610FD)
-I (..\Drivers\STM32-ADS1115\ADS1115.h)(0x649165BE)
+I (..\Drivers\STM32-ADS1115\ADS1115.h)(0x64929377)
 I (..\Core\Inc\Display.h)(0x64902A09)
 I (..\Core\Inc\DataProcessing.h)(0x64901547)
 F (../Core/Src/gpio.c)(0x648AA71B)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/gpio.o -MD)
 I (..\Core\Inc\gpio.h)(0x647EDEEE)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -326,7 +279,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/adc.c)(0x64882CD2)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/adc.o -MD)
 I (..\Core\Inc\adc.h)(0x6482C7EF)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -373,7 +326,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/dma.c)(0x648A9F93)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/dma.o -MD)
 I (..\Core\Inc\dma.h)(0x648A9F93)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -420,7 +373,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/i2c.c)(0x648AA71C)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/i2c.o -MD)
 I (..\Core\Inc\i2c.h)(0x648AA71C)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -467,7 +420,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/iwdg.c)(0x64897DDE)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/iwdg.o -MD)
 I (..\Core\Inc\iwdg.h)(0x64897DDE)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -514,7 +467,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/rtc.c)(0x6482C7EF)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/rtc.o -MD)
 I (..\Core\Inc\rtc.h)(0x647EDEEE)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -561,7 +514,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/spi.c)(0x648A9F94)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/spi.o -MD)
 I (..\Core\Inc\spi.h)(0x648A9F94)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -608,7 +561,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/tim.c)(0x64883700)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/tim.o -MD)
 I (..\Core\Inc\tim.h)(0x64883700)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -655,7 +608,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/usart.c)(0x648AA71D)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/usart.o -MD)
 I (..\Core\Inc\usart.h)(0x648AA71D)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -702,7 +655,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/usb_otg.c)(0x648AA71D)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/usb_otg.o -MD)
 I (..\Core\Inc\usb_otg.h)(0x648AA71D)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -748,7 +701,7 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 F (../Core/Src/stm32f4xx_it.c)(0x649164AF)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/stm32f4xx_it.o -MD)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -794,12 +747,13 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
 I (..\Core\Inc\stm32f4xx_it.h)(0x64915B7A)
-I (..\Core\Inc\ili9341.h)(0x64901AFC)
+I (..\Core\Inc\ili9341.h)(0x64929B2B)
 I (..\Core\Inc\fonts.h)(0x644610FD)
-I (..\Drivers\STM32-ADS1115\ADS1115.h)(0x649165BE)
+I (..\Core\Inc\spi.h)(0x648A9F94)
+I (..\Drivers\STM32-ADS1115\ADS1115.h)(0x64929377)
 I (..\Core\Inc\i2c.h)(0x648AA71C)
 F (../Core/Src/stm32f4xx_hal_msp.c)(0x647EDEEE)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/stm32f4xx_hal_msp.o -MD)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -844,6 +798,55 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
+F (..\Core\Src\ili9341.c)(0x64929B94)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/ili9341.o -MD)
+I (..\Core\Inc\ili9341.h)(0x64929B2B)
+I (..\Core\Inc\fonts.h)(0x644610FD)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x62529918)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
+I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x647DD1BC)
+I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x647DD18B)
+I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x647DD18B)
+I (..\Drivers\CMSIS\Include\core_cm4.h)(0x647DD18E)
+I (..\Drivers\CMSIS\Include\cmsis_version.h)(0x647DD18E)
+I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x647DD18E)
+I (..\Drivers\CMSIS\Include\cmsis_armclang.h)(0x647DD18E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\arm_compat.h)(0x62529916)
+I (C:\Keil_v5\ARM\ARMCLANG\include\arm_acle.h)(0x62529916)
+I (..\Drivers\CMSIS\Include\mpu_armv7.h)(0x647DD18E)
+I (..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x647DD18B)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h)(0x647DD1BC)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stddef.h)(0x62529916)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_exti.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_adc.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
+I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
+I (..\Core\Inc\spi.h)(0x648A9F94)
+I (..\Core\Inc\main.h)(0x64929AD5)
 F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c)(0x647DD1BC)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/stm32f4xx_hal_adc.o -MD)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
@@ -2033,10 +2036,10 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
-F (..\Drivers\STM32-ADS1115\ADS1115.c)(0x649165BE)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/ads1115.o -MD)
-I (..\Drivers\STM32-ADS1115\ADS1115.h)(0x649165BE)
+F (..\Drivers\STM32-ADS1115\ADS1115.c)(0x64918DCC)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -w -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/STM32-ADS1115 -I ../Img-I./RTE/_Tonom405RG-IC:/Keil_v5/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Keil_v5/Packs/Keil/STM32F4xx_DFP/2.17.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="537" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o tonom405rg/ads1115.o -MD)
+I (..\Drivers\STM32-ADS1115\ADS1115.h)(0x64929377)
 I (..\Core\Inc\i2c.h)(0x648AA71C)
-I (..\Core\Inc\main.h)(0x64914752)
+I (..\Core\Inc\main.h)(0x64929AD5)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x647DD1BC)
 I (..\Core\Inc\stm32f4xx_hal_conf.h)(0x648AD4A4)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x647DD1BC)
@@ -2081,7 +2084,6 @@ I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x647DD1BC)
 I (..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x647DD1BC)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x62529916)
-F (..\Drivers\STM32-ADS1115\ADS1115.h)(0x649165BE)()
 F (..\img\bat_clr_44_24.h)(0x63BE8BED)()
 F (..\img\bat_dif_7_22.h)(0x63BE8BED)()
 F (..\img\bluetooth_15_24.h)(0x63BE8BED)()

@@ -1,6 +1,5 @@
 --cpu=Cortex-M4.fp.sp
 "tonom405rg\startup_stm32f405xx.o"
-"tonom405rg\ili9341.o"
 "tonom405rg\fonts.o"
 "tonom405rg\dataprocessing.o"
 "tonom405rg\display.o"
@@ -19,6 +18,7 @@
 "tonom405rg\usb_otg.o"
 "tonom405rg\stm32f4xx_it.o"
 "tonom405rg\stm32f4xx_hal_msp.o"
+"tonom405rg\ili9341.o"
 "tonom405rg\stm32f4xx_hal_adc.o"
 "tonom405rg\stm32f4xx_hal_adc_ex.o"
 "tonom405rg\stm32f4xx_ll_adc.o"

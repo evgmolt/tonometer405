@@ -395,11 +395,6 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
-              <FileName>ili9341.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ili9341.c</FilePath>
-            </File>
-            <File>
               <FileName>fonts.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\fonts.c</FilePath>
@@ -901,6 +896,11 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>ili9341.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ili9341.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1571,11 +1571,6 @@
               <FileName>ADS1115.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\STM32-ADS1115\ADS1115.c</FilePath>
-            </File>
-            <File>
-              <FileName>ADS1115.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Drivers\STM32-ADS1115\ADS1115.h</FilePath>
             </File>
           </Files>
         </Group>

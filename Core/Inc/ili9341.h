@@ -1,46 +1,52 @@
-/*
- * ili9341.h
- *
- *  Created on: 2019/12/26
- *      Author: Kotetsu Yamamoto
- *      Copyright [Kotetsu Yamamoto]
+/* vim: set ai et ts=4 sw=4: */
+#ifndef __ILI9341_H__
+#define __ILI9341_H__
 
-MIT License
+#include "fonts.h"
+#include <stdbool.h>
+#include "stm32f4xx_hal.h"
+#include "spi.h"
 
-Copyright (c) 2020 Kotestu Yamamoto
+#define ILI9341_MADCTL_MY  0x80
+#define ILI9341_MADCTL_MX  0x40
+#define ILI9341_MADCTL_MV  0x20
+#define ILI9341_MADCTL_ML  0x10
+#define ILI9341_MADCTL_RGB 0x00
+#define ILI9341_MADCTL_BGR 0x08
+#define ILI9341_MADCTL_MH  0x04
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+/*** Redefine if necessary ***/
+//#define ILI9341_SPI_PORT        SPI0
+#define ILI9341_RCU_SPI         RCU_SPI0
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+#define ILI9341_CLK_Pin         GPIO_PIN_5
+#define ILI9341_CLK_GPIO_Port   GPIOA
+#define ILI9341_CLK_RCU         RCU_GPIOA
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+#define ILI9341_MISO_Pin        GPIO_PIN_6
+#define ILI9341_MISO_GPIO_Port  GPIOA
+#define ILI9341_MISO_RCU        RCU_GPIOA
 
- */
+#define ILI9341_MOSI_Pin        GPIO_PIN_7
+#define ILI9341_MOSI_GPIO_Port  GPIOA
+#define ILI9341_MOSI_RCU        RCU_GPIOA
 
-#ifndef INC_ILI9341_H_
-#define INC_ILI9341_H_
+#define ILI9341_RES_Pin         GPIO_PIN_3
+#define ILI9341_RES_GPIO_Port   GPIOC
+#define ILI9341_RES_RCU         RCU_GPIOC
 
-#ifdef __cplusplus
- extern "C" {
-#endif
+#define ILI9341_CS_Pin          GPIO_PIN_2
+#define ILI9341_CS_GPIO_Port    GPIOC
+#define ILI9341_CS_RCU          RCU_GPIOC
 
-#include "main.h" // For STM32F4
-#include "fonts.h" // For STM32F4
+#define ILI9341_DC_Pin          GPIO_PIN_4
+#define ILI9341_DC_GPIO_Port    GPIOC
+#define ILI9341_DC_RCU          RCU_GPIOC
 
-#define GUI_WIDTH 320
-#define GUI_HEIGHT 240
+// default orientation
+#define ILI9341_WIDTH  240
+#define ILI9341_HEIGHT 320
+#define ILI9341_ROTATION (ILI9341_MADCTL_MX | ILI9341_MADCTL_BGR)
 
 // Color definitions
 #define ILI9341_BLACK   0x0000
@@ -53,17 +59,21 @@ SOFTWARE.
 #define ILI9341_WHITE   0xFFFF
 #define ILI9341_COLOR565(r, g, b) (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3))
 
+// call before initializing any SPI devices
+void ILI9341_Unselect();
+
 void ILI9341_Init(void);
-void ILI9341_SetWindow(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y);
-void ILI9341_DrawBitmap(uint16_t w, uint16_t h, uint8_t *s);
-void ILI9341_WritePixel(uint16_t x, uint16_t y, uint16_t color);
-void ILI9341_EndOfDrawBitmap(void);
+void ILI9341_DrawPixel(uint16_t x, uint16_t y, uint16_t color);
+void ILI9341_WriteString(uint16_t x, uint16_t y, const char* str, FontDef font, uint16_t color, uint16_t bgcolor);
+void ILI9341_FillRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+void ILI9341_FillScreen(uint16_t color);
+void ILI9341_DrawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const uint16_t* data);
+void ILI9341_InvertColors(bool invert);
 
-void LCD_WR_REG(uint8_t data);
-void LCD_IO_WriteMultipleData(uint8_t *pData, uint32_t Size);
+void SPI_Transmit(uint32_t SPI_, uint8_t *pData, uint16_t Size, int Timeout);
 
-#ifdef __cplusplus
-}
-#endif
+void spi_config(void);
+void spi_gpio_config(void);
+void spi_rcu_config(void);
 
-#endif /* INC_ILI9341_H_ */
+#endif // __ILI9341_H__

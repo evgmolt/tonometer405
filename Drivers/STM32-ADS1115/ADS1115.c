@@ -15,7 +15,7 @@ void RequestADC()
   config |= 0;                                // bit 12-14
   config |= GAIN;                             // bit 9-11
   config |= ADS1115_MODE_SINGLE;              // bit 8
-//  config |= DATA_RATE;                        // bit 5-7
+//  config |= DATA_RATE;                      // bit 5-7
   config |= COMP_QUE_CONVERT;                 // bit 0..1   ALERT mode
   WriteRegister(REG_CONFIG, config);
 }
@@ -24,8 +24,11 @@ HAL_StatusTypeDef GetADCValue()
 {
     uint8_t buffer[2];
     HAL_StatusTypeDef hal_result = HAL_I2C_Master_Receive(&hi2c1, (ADS1115_ADDRESS << 1), buffer, 2,  I2C_TIMEOUT);
-    uint16_t result = buffer[1];
-    ADS1115_value = result << 8 | buffer[0]; //? порядок байт    
+    if (hal_result == HAL_OK)
+    {
+        uint16_t result = buffer[1];
+        ADS1115_value = result << 8 | buffer[0]; //? порядок байт    
+    }
     return hal_result;
 }
 

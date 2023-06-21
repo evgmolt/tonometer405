@@ -31,7 +31,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "stm32f4xx_hal.h"
 #include "stdbool.h"
 /* USER CODE END Includes */
 
@@ -268,10 +267,7 @@ void i2c_convers(void);
 void TFT_print(void);
 
 void usart_config_0(void);
-void send_buf_UART_0(uint8_t *buf, uint8_t num);
-
 void usart_config_1(void);
-void send_buf_UART_1(uint8_t *buf, uint8_t num);
 void SIM_recieve_OK(void);
 void PrintNum(int16_t num, uint16_t X0, uint16_t Y0, uint8_t color);
 void TimeSet(uint32_t tmp_hh,uint32_t tmp_mm,uint32_t tmp_ss);
