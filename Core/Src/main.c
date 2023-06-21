@@ -81,20 +81,9 @@ int16_t puls_buff_IND_MIN[50]={0};
 
 uint16_t frequency=128;
 
-uint16_t Lo_thresh_default = 0x8000;
-uint16_t Hi_thresh_default = 0x0000;
-
-uint8_t Hi_ADS1115_config = 0b10001111;
-uint8_t Lo_ADS1115_config = 0b11100100;
-
-uint8_t ADS1115_FLAG=0;
-
 int16_t PSys = 0;
 int16_t PDia = 0;
 int16_t PMean;
-uint16_t m_ss;
-uint16_t m_mm;
-uint16_t m_hh;
 int indexPSys = 0;
 int indexPDia = 0;
 int16_t XMax;
@@ -110,12 +99,9 @@ bool ble_data_ready = false;
 uint8_t ble_buffer_counter = 0;
 uint8_t sim800_FLAG=0;
 uint8_t rang_batt_old=99;
-uint8_t i2c_transmitter[16];
-uint8_t i2c_receiver[16];
 uint8_t send_buff[100]={0};
 uint8_t buff097[10]={0};
 //usb_dev usbd_cdc;
-uint16_t adc_value[8];
 uint16_t num_string=0;
 uint16_t count_send_bluetooth=0;
 short int ble_buffer[BLE_PACKET_SIZE] = {0};
@@ -300,7 +286,7 @@ int main(void)
                 shutdown_counter = 0;
                 if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)==0) indicate_charge_toggle=1; //Не работает
                 PrintBattCharge();                
-                delay_1ms(1500);                
+                HAL_Delay(1500);                
                 if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10)==0) DeviceOff();                        
                 break;
             case PRESSURE_TEST:
@@ -308,7 +294,7 @@ int main(void)
                 GetADCData(false);
                 PrintNum(current_pressure, BIG_NUM_RIGHT, DIA_TOP, GREEN);
                 if (allow_send_data == 1) usb_send_16(i2c_out,0);
-                delay_1ms(200);
+                HAL_Delay(200);
 
                 PrintTime();
                 ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, SERIAL, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
@@ -564,7 +550,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                             SERIAL[j + 2] = send_buff[j];
                         }
 //                        FmcSerialSendAT();                        
-                        delay_1ms(200);                                    
+                        HAL_Delay(200);                                    
                         DeviceOff();
                     }
                 }

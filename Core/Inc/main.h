@@ -245,45 +245,18 @@ void Error_Handler(void);
 #define PULSE_RANGE 8
 #define MEAS_POS    16
 
-void i2c_config(void);
-void my_delay(int time);    
-
-void ADC_rcu_config(void);
-void ADC_gpio_config(void);
-void adc_config(void);
-void dma_config(void);
-void GPIO_config(void);
-    
-void spi_rcu_config(void);
-void spi_gpio_config(void);    
-void spi_config(void);
-
-void nvic_configuration(void);
-void rtc_configuration(void);
-
-void usb_send_i2c_convers(void);
-void i2c_convers(void);    
 void TFT_print(void);
 
-void usart_config_0(void);
-void usart_config_1(void);
 void SIM_recieve_OK(void);
 void PrintNum(int16_t num, uint16_t X0, uint16_t Y0, uint8_t color);
-void TimeSet(uint32_t tmp_hh,uint32_t tmp_mm,uint32_t tmp_ss);
-void TimeInit(void);
-void ButtonInterruptConfig(void);
 
 void DeviceOff(void);
 void Calibration(void);
-
-
 
 uint8_t usb_send_save(int16_t *mass1, int16_t *mass2);
 
 void ClearScreen(void);
 void usb_send_16(short int T1, short int T2);
-void ADS1115_config(uint8_t pointer, uint8_t byte1, uint8_t byte2);
-uint8_t ADS1115_read_IT(void);
 void PrintError(uint8_t K);
 void BootMode(void);
 void PrintBattCharge(void);
@@ -367,20 +340,9 @@ extern int16_t puls_buff_IND_MIN[50];
 
 extern uint16_t frequency;
 
-extern uint16_t Lo_thresh_default;
-extern uint16_t Hi_thresh_default;
-
-extern uint8_t Hi_ADS1115_config;
-extern uint8_t Lo_ADS1115_config;
-
-extern uint8_t ADS1115_FLAG;
-
 extern int16_t PSys;
 extern int16_t PDia;
 extern int16_t PMean;
-extern uint16_t m_ss;
-extern uint16_t m_mm;
-extern uint16_t m_hh;
 
 extern int indexPSys;
 extern int indexPDia;
@@ -400,21 +362,14 @@ extern int16_t dc_array_window;
 extern int16_t ac_array_window;
 extern uint8_t UART0_flag;
 
-extern uint8_t Hi_ADS1115_config;
-extern uint8_t Lo_ADS1115_config;
-
 extern uint8_t mode;
 
 extern bool ble_data_ready;
 extern uint8_t ble_buffer_counter;
 extern uint8_t sim800_FLAG;
 extern uint8_t rang_batt_old;
-extern uint8_t i2c_transmitter[16];
-extern uint8_t i2c_receiver[16];
 
 extern uint8_t send_buff[100];
-extern uint8_t buff097[10];
-extern uint16_t adc_value[8];
 
 extern uint16_t num_string;
 

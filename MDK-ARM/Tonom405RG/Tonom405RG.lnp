@@ -48,6 +48,7 @@
 "tonom405rg\stm32f4xx_ll_usb.o"
 "tonom405rg\system_stm32f4xx.o"
 "tonom405rg\ads1115.o"
+"tonom405rg\at24_hal_i2c.o"
 --strict --scatter "Tonom405RG\Tonom405RG.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

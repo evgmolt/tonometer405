@@ -24,8 +24,6 @@
 
 //Max 2290
 
-extern uint16_t adc_value[8];
-
 void PrintHeart(bool show)
 {
     if (show) 
@@ -235,7 +233,7 @@ void TFT_print(void)
     HAL_ADC_PollForConversion(&hadc1, 100); // ожидаем окончания преобразования
     batt_level = HAL_ADC_GetValue(&hadc1); // читаем полученное значение 
     HAL_ADC_Stop(&hadc1);
-    batt_level=adc_value[0] * 3300 / 0xFFF;
+    batt_level = batt_level * 3300 / 0xFFF; //??
 
     uint8_t buff[20]={0};
 //    sprintf(buff,"%04d:",batt_level);

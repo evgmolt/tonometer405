@@ -24,7 +24,7 @@ void ILI9341_Unselect()
 static void ILI9341_Reset() 
 {
     reset_RES
-    my_delay(5);
+	HAL_Delay(100);
     set_RES
 }
 
@@ -79,7 +79,7 @@ void ILI9341_Init()
 
     // SOFTWARE RESET
     ILI9341_WriteCommand(0x01);
-    my_delay(300000);
+	HAL_Delay(120);
         
     // POWER CONTROL A
     ILI9341_WriteCommand(0xCB);
@@ -211,7 +211,7 @@ void ILI9341_Init()
 
     // EXIT SLEEP
     ILI9341_WriteCommand(0x11);
-    my_delay(1);
+    HAL_Delay(120);
 
     // TURN ON DISPLAY
     ILI9341_WriteCommand(0x29);
