@@ -9,27 +9,9 @@
 
 #define ILI9341_MADCTL_MY  0x80
 #define ILI9341_MADCTL_MX  0x40
-#define ILI9341_MADCTL_MV  0x20
-#define ILI9341_MADCTL_ML  0x10
 #define ILI9341_MADCTL_RGB 0x00
 #define ILI9341_MADCTL_BGR 0x08
 #define ILI9341_MADCTL_MH  0x04
-
-/*** Redefine if necessary ***/
-//#define ILI9341_SPI_PORT        SPI0
-#define ILI9341_RCU_SPI         RCU_SPI0
-
-#define ILI9341_CLK_Pin         GPIO_PIN_5
-#define ILI9341_CLK_GPIO_Port   GPIOA
-#define ILI9341_CLK_RCU         RCU_GPIOA
-
-#define ILI9341_MISO_Pin        GPIO_PIN_6
-#define ILI9341_MISO_GPIO_Port  GPIOA
-#define ILI9341_MISO_RCU        RCU_GPIOA
-
-#define ILI9341_MOSI_Pin        GPIO_PIN_7
-#define ILI9341_MOSI_GPIO_Port  GPIOA
-#define ILI9341_MOSI_RCU        RCU_GPIOA
 
 #define ILI9341_RES_Pin         GPIO_PIN_3
 #define ILI9341_RES_GPIO_Port   GPIOC
@@ -69,8 +51,6 @@ void ILI9341_FillRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint1
 void ILI9341_FillScreen(uint16_t color);
 void ILI9341_DrawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const uint16_t* data);
 void ILI9341_InvertColors(bool invert);
-
-void SPI_Transmit(uint32_t SPI_, uint8_t *pData, uint16_t Size, int Timeout);
 
 void spi_config(void);
 void spi_gpio_config(void);

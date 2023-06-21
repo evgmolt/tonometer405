@@ -260,7 +260,6 @@ void spi_config(void);
 
 void nvic_configuration(void);
 void rtc_configuration(void);
-void PrintTime(uint32_t timevar);
 
 void usb_send_i2c_convers(void);
 void i2c_convers(void);    
@@ -303,7 +302,7 @@ void GetNum();
 
 void WriteBackupRegister(uint16_t day, uint16_t month, uint16_t year);
 void CheckBackupRegister(uint16_t *_day, uint16_t *_month, uint16_t *_year);
-void SendMeasurementResult(uint8_t c_day, uint8_t c_month, uint8_t c_year, uint8_t c_ss, uint8_t c_mm, uint8_t c_hh, int16_t sis, int16_t dia, int16_t pressure, int16_t bonus);
+void SendMeasurementResult(int16_t sis, int16_t dia, int16_t pressure, int16_t bonus);
 
 void PrintSYS(int16_t IN);
 void PrintDIA(int16_t IN);
@@ -393,10 +392,6 @@ extern int16_t i2c_out;
 extern int ZeroVal;
 extern uint8_t indicate_charge_toggle;
 extern uint8_t indicate_charge_counter;
-
-extern uint16_t cur_day, cur_month, cur_year;
-extern uint32_t cur_thh,cur_tmm,cur_tss;
-extern uint32_t cur_time;
 
 extern uint8_t bluetooth_status;
 extern uint8_t status_byte;

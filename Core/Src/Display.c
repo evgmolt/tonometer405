@@ -1,5 +1,6 @@
 #include "main.h"
 #include "Display.h"
+#include "rtc.h"
 #include "bat_dif_7_22.h"
 #include "bat_clr_44_24.h"
 #include "ili9341.h"
@@ -208,49 +209,20 @@ void ClearScreen(void)
     ILI9341_FillRectangle(PULSE_LEFT, PULSE_TOP, 123, 64, ILI9341_WHITE);	
 }
 
-void PrintTime(uint32_t timevar)
+void PrintTime()
 {
+    RTC_TimeTypeDef sTime = {0};
+    HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+    RTC_DateTypeDef sDate = {0};
+    HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+    
     static uint32_t seconds;
     uint8_t buff[100]={0};
-    uint32_t thh = 0, tmm = 0, tss = 0;
         
-    // compute  hours 
-    thh = timevar / 3600;
-    // compute minutes 
-    tmm = (timevar % 3600) / 60;
-    // compute seconds 
-    tss = (timevar % 3600) % 60;
-    if (seconds == tss) return;
-    seconds = tss;
-        
-        CheckBackupRegister(&cur_day, &cur_month, &cur_year);
-        if (thh==0 & cur_day==0 & cur_month==0){
-
-                cur_day=1;
-                cur_month=1;
-                WriteBackupRegister(cur_day, cur_month, cur_year);
-        }
-        
-        if (thh>23) {
-                cur_day++; 
-                thh=0;
-                TimeSet(thh,tmm,tss);
-                WriteBackupRegister(cur_day, cur_month, cur_year);                
-        }
-        if (cur_day>=29) { //add calendar....
-                cur_month++; 
-                cur_day=1;    
-                WriteBackupRegister(cur_day, cur_month, cur_year);
-        }
-        if (cur_month>12) {
-                cur_year++; 
-                cur_month=1;
-                WriteBackupRegister(cur_day, cur_month, cur_year);
-        }
-        sprintf(buff, "%02d:%02d:%02d", thh, tmm, tss);
-        ILI9341_WriteString(TIME_LEFT, TIME_TOP, buff, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);  
-        sprintf(buff, "%02d.%02d.20%d", cur_day, cur_month, cur_year);
-        ILI9341_WriteString(TIME_LEFT + 85, TIME_TOP, buff, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);  
+    sprintf(buff, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+    ILI9341_WriteString(TIME_LEFT, TIME_TOP, buff, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);  
+    sprintf(buff, "%02d.%02d.20%d", sDate.Date, sDate.Month, sDate.Year);
+    ILI9341_WriteString(TIME_LEFT + 85, TIME_TOP, buff, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);  
 }
 
 
@@ -289,7 +261,7 @@ void TFT_print(void)
     }
     if (view_time)
     {
-        PrintTime(rtc_counter_get());
+        PrintTime();
         ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, SERIAL, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
     }
 }

@@ -5,7 +5,7 @@
 void TFT_print(void);
 void PrintNum(int16_t num, uint16_t X0, uint16_t Y0, uint8_t color);
 void ClearScreen(void);
-void PrintTime(uint32_t timevar);
+void PrintTime();
 void PrintError(uint8_t K);
 void print_battery(void);
 void PrintBattCharge(void);

@@ -103,9 +103,6 @@ int16_t i2c_out=0;
 int ZeroVal=0;
 uint8_t indicate_charge_toggle=1;
 uint8_t indicate_charge_counter=1;
-uint16_t cur_day=13, cur_month=12, cur_year=2022;
-uint32_t cur_thh=0,cur_tmm=0,cur_tss=0;
-uint32_t cur_time=0;
 uint8_t bluetooth_status=0;
 uint8_t status_byte=0;
 uint8_t mode = INIT_START;
@@ -312,7 +309,8 @@ int main(void)
                 PrintNum(current_pressure, BIG_NUM_RIGHT, DIA_TOP, GREEN);
                 if (allow_send_data == 1) usb_send_16(i2c_out,0);
                 delay_1ms(200);
-                PrintTime(rtc_counter_get());
+
+                PrintTime();
                 ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, SERIAL, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
                 if (usb_command == USB_COMMAND_SET_RATE)
                 {   
@@ -406,20 +404,13 @@ int main(void)
                             status_byte |= IRREG_PULSE;
                         }
                         SendATCommand();
-                    
-                        cur_time = rtc_counter_get();
-                        m_hh = cur_time / 3600;
-                        m_mm = (cur_time % 3600) / 60;
-                        m_ss = (cur_time % 3600) % 60;
-                        CheckBackupRegister(&cur_day, &cur_month, &cur_year);
-                        if     (cur_year>=255)    cur_year-=2000;
                     }
                     else 
                     {
                         status_byte|=0x80;
                         PrintError(ERROR_MEAS);                            
                     }
-                    SendMeasurementResult((uint8_t)cur_day, (uint8_t)cur_month, (uint8_t)cur_year, (uint8_t)m_ss, (uint8_t)m_mm, (uint8_t)m_hh, (uint8_t)PSys, (uint8_t)PDia, (uint8_t)pulse,status_byte);
+                    SendMeasurementResult((uint8_t)PSys, (uint8_t)PDia, (uint8_t)pulse,status_byte);
                     
                     VALVE_FAST_OPEN;
                     VALVE_SLOW_OPEN;
@@ -584,15 +575,24 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                 {
                     if (checksum == buff[i + 2])
                     {
-                        cur_year = send_buff[0];
-                        cur_month = send_buff[1];
-                        cur_day = send_buff[2];
-                        cur_thh = send_buff[3];
-                        cur_tmm = send_buff[4];
-                        cur_tss = send_buff[5];
-                        TimeSet((uint32_t)cur_thh, (uint32_t)cur_tmm, (uint32_t)cur_tss);
-                        WriteBackupRegister((uint16_t)cur_day, (uint16_t)cur_month, (uint16_t)cur_year);
-                        sprintf(timestr, "%02d:%02d:%02d  %02d.%02d.20%d", cur_thh, cur_tmm, cur_tss, cur_day, cur_month, cur_year);
+                        RTC_TimeTypeDef sTime = {0};
+                        RTC_DateTypeDef sDate = {0};
+                        sDate.Year = send_buff[0];
+                        sDate.Month = send_buff[1];
+                        sDate.Date = send_buff[2];
+                        sTime.Hours = send_buff[3];
+                        sTime.Minutes = send_buff[4];
+                        sTime.Seconds = send_buff[5];
+                        if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+                        {
+                            Error_Handler();
+                        }
+                        if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+                        {
+                            Error_Handler();
+                        }
+//                        WriteBackupRegister((uint16_t)cur_day, (uint16_t)cur_month, (uint16_t)cur_year);
+                        sprintf(timestr, "%02d:%02d:%02d  %02d.%02d.20%d", sTime.Hours, sTime.Minutes, sTime.Seconds, sDate.Date, sDate.Month, sDate.Year);
                         ILI9341_WriteString(TIME_LEFT, TIME_TOP, timestr, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
                         ResetBLEReceiver();
                         UART0_count = 0;
@@ -640,9 +640,14 @@ void ResetBLEReceiver()
     result_index = 0;
 }
 
-void SendMeasurementResult(uint8_t c_day, uint8_t c_month, uint8_t c_year, uint8_t c_ss, uint8_t c_mm, uint8_t c_hh, int16_t sis, int16_t dia, int16_t pressure, int16_t bonus)
+void SendMeasurementResult(int16_t sis, int16_t dia, int16_t pressure, int16_t bonus)
 {
-    uint8_t cur_buff[13]={'0','2', 0x01, c_day, c_month, c_year, c_ss, c_mm, c_hh, sis, dia, pressure, bonus};        
+    RTC_TimeTypeDef sTime = {0};
+    HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+    RTC_DateTypeDef sDate = {0};
+    HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
+    uint8_t cur_buff[13]={'0','2', 0x01, sDate.Date, sDate.Month, sDate.Year, sTime.Seconds, sTime.Minutes, sTime.Hours, sis, dia, pressure, bonus};        
     uint8_t c_summ=0;        
     for (int q = 0; q < 13; q++)
     {
