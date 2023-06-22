@@ -239,7 +239,6 @@ int main(void)
                     lock_interval=50;
                     ResetDetector();
                     puls_counter=0;            
-//                    Timer2Start();
                     stop_meas = false;
                     mode = PUMPING_MANAGEMENT;
                     button_released = 0;
@@ -250,7 +249,6 @@ int main(void)
                 DeviceOff();
                 break;
             case PUMPING_MANAGEMENT:
-                BluetoothCheck();
                 shutdown_counter = 0;
                 ILI9341_FillRectangle(65, 245, 45, 27, ILI9341_WHITE);
                 
@@ -281,6 +279,7 @@ int main(void)
                 {
                     StopPumping();
                 }    
+                BluetoothCheck();
                 break;
             case USB_CHARGING:
                 shutdown_counter = 0;
@@ -406,6 +405,7 @@ int main(void)
                         mode = INIT_START;
 #endif                    
                 }                    
+                BluetoothCheck();
                 break;
             case SEND_SAVE_BUFF_MSG:
                 shutdown_counter = 0;
@@ -695,6 +695,11 @@ void DeviceOff(void)
 
 void BluetoothCheck()
 {
+    if (bluetooth_status != HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9))
+    {
+        bluetooth_status != HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9);
+        PrintBluetooth(bluetooth_status);
+    }
 }
 
 /* USER CODE END 4 */
