@@ -101,6 +101,7 @@ int button_pressed_counter = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern DMA_HandleTypeDef hdma_spi1_tx;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
@@ -540,7 +541,7 @@ void USART1_IRQHandler(void)
         if (send_serial_now)
         {
             send_serial_now = 0;
-//            usbd_ep_send (&usbd_cdc, CDC_IN_EP, SERIAL, SERIAL_NUM_SIZE);
+            CDC_Transmit_FS(SERIAL, SERIAL_NUM_SIZE);
             allow_send_data = 1;
         }
     }
@@ -574,6 +575,20 @@ void DMA2_Stream3_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Stream3_IRQn 1 */
 
   /* USER CODE END DMA2_Stream3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USB On The Go FS global interrupt.
+  */
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

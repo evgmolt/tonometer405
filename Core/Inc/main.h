@@ -223,20 +223,19 @@ void Error_Handler(void);
 //команды BLE
 #define BLE_CMD_DATETIME    3
 #define BLE_CMD_SERIAL      4
-//команды записи
-#define BLE_CMD_SETURL      6
-#define BLE_CMD_SETPORT     7
-#define BLE_CMD_SETLOGIN    8
-#define BLE_CMD_SETPASSWORD 9
-#define BLE_CMD_SETPOINT    10
-#define BLE_CMD_SETID       11
-//команды чтени€
-#define BLE_CMD_GETURL      12
-#define BLE_CMD_GETPORT     13
-#define BLE_CMD_GETLOGIN    14
-#define BLE_CMD_GETPASSWORD 15
-#define BLE_CMD_GETPOINT    16
-#define BLE_CMD_GETID       17
+
+#define BLE_CMD_SET         6  //Ќужно прибавить соответствующее F_XXX
+#define BLE_CMD_GET         12 //Ќужно прибавить соответствующее F_XXX
+
+#define F_URL      0
+#define F_PORT     1
+#define F_LOGIN    2
+#define F_PASSWORD 3
+#define F_POINT    4
+#define F_ID       5
+
+#define EEPROM_CELL_SIZE 32
+#define EEPROM_BASE_ADDR 0xA0
 
 //Ѕиты статуса
 #define BODY_MOVE   1
@@ -244,6 +243,9 @@ void Error_Handler(void);
 #define IRREG_PULSE 4
 #define PULSE_RANGE 8
 #define MEAS_POS    16
+
+#define BLE_CONNECT 1
+#define BLE_DISCONNECT 0
 
 void TFT_print(void);
 

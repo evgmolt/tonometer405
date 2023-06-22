@@ -26,7 +26,7 @@
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
-#include "usb_otg.h"
+#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -180,7 +180,7 @@ int main(void)
   MX_SPI1_Init();
   MX_I2C1_Init();
   MX_USART2_UART_Init();
-  MX_USB_OTG_FS_HCD_Init();
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
   ILI9341_Init();
   InitADC();
@@ -427,16 +427,7 @@ int main(void)
         {
             PrintHeart(false);
             erase_heart = false;
-        }
-                    
-/*        if (0U == cdc_acm_check_ready(&usbd_cdc)) 
-        {
-            cdc_acm_data_receive(&usbd_cdc);
-        } 
-        else 
-        {
-            cdc_acm_data_send(&usbd_cdc);
-        }            */
+        }                    
   }
   /* USER CODE END 3 */
 }
@@ -577,7 +568,6 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                         {
                             Error_Handler();
                         }
-//                        WriteBackupRegister((uint16_t)cur_day, (uint16_t)cur_month, (uint16_t)cur_year);
                         sprintf(timestr, "%02d:%02d:%02d  %02d.%02d.20%d", sTime.Hours, sTime.Minutes, sTime.Seconds, sDate.Date, sDate.Month, sDate.Year);
                         ILI9341_WriteString(TIME_LEFT, TIME_TOP, timestr, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
                         ResetBLEReceiver();
@@ -586,7 +576,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                     }
                 }                
             }
-            if (command >= BLE_CMD_SETURL && command <= BLE_CMD_SETID)
+            if (command >= BLE_CMD_SET + F_URL && command <= BLE_CMD_SET + F_ID)
             {
                 if (index_in_packet == BLE_PACKET_SIZE - 2)
                 {
@@ -597,16 +587,17 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                 {
                     if (checksum == buff[i + 1])
                     {
+                        at24_HAL_WriteBytes(&hi2c1, command - BLE_CMD_SET, send_buff, EEPROM_CELL_SIZE);
                         ILI9341_WriteString(left, step / 2 + (command - 6) * step, send_buff, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
                         ResetBLEReceiver();
                     }
                 }
             }
-            if (command >= BLE_CMD_GETURL && command <= BLE_CMD_GETID)
+            if (command >= BLE_CMD_GET + F_URL && command <= BLE_CMD_GET + F_ID)
             {
                 if (buff[i + 1] == checksum) 
                 {
-                    sprintf(send_buff,"Something");
+                    at24_HAL_WriteBytes(&hi2c1, command - BLE_CMD_SET, send_buff, EEPROM_CELL_SIZE);
                     HAL_UART_Transmit_IT(&huart1, send_buff, 10);
                     ResetBLEReceiver();
                 }
@@ -681,7 +672,7 @@ void usb_send_16(short int T1, short int T2)
     uint8_t send_H2 = (T2 >> 8) & 0xFF;
     uint8_t send_L2 = T2 & 0xFF;
     uint8_t send_buff[5] = {25, send_L1, send_H1, send_L2, send_H2};
-//    usbd_ep_send (&usbd_cdc, CDC_IN_EP, send_buff, 5);
+    CDC_Transmit_FS(send_buff, 5);
 }
 
 void DeviceOff(void)
