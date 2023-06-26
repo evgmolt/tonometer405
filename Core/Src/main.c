@@ -69,10 +69,7 @@ void SystemClock_Config(void);
 uint16_t pulse = 0;
 
 uint32_t *ptrd;
-uint32_t address = 0x00000000U;
 uint8_t SERIAL[SERIAL_NUM_SIZE]   = {'T','O','N','0','2','0','2','2','2','0','0','1',0};
-/* calculate the number of page to be programmed/erased */
-
 
 int16_t puls_buff_NEW[50]={0};
 int16_t puls_buff_AMP[50]={0};
@@ -185,6 +182,7 @@ int main(void)
   ILI9341_Init();
   InitADC();
   HAL_TIM_Base_Start_IT(&htim1);
+  at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, SERIAL, SERIAL_NUM_SIZE);
 
   /* USER CODE END 2 */
 
@@ -481,6 +479,15 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void SendSerialAT(uint8_t *serial_buf)
+{
+    uint8_t cur_buff[30] = {'A','T','+','N','A','M','E','='};
+    strncat(cur_buff, serial_buf, SERIAL_NUM_SIZE - 1); //Приклеиваем серийный номер без финального нуля
+    strncat(cur_buff, "\n", 2);
+    HAL_UART_Transmit_IT(&huart1, cur_buff, strlen(cur_buff));
+}
+    
 uint8_t BLECommandsReceiver(uint8_t *buff)
 {
     const uint8_t top = 20;
@@ -538,9 +545,10 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                     {
                         for (uint8_t j = 0; j < 7; j++)
                         {
-                            SERIAL[j + 2] = send_buff[j];
+                            SERIAL[j + 5] = send_buff[j]; //"TON02" уже в буфере. 
                         }
-//                        FmcSerialSendAT();                        
+                        at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, SERIAL, SERIAL_NUM_SIZE);
+                        SendSerialAT(SERIAL);                        
                         HAL_Delay(200);                                    
                         DeviceOff();
                     }
@@ -587,7 +595,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                 {
                     if (checksum == buff[i + 1])
                     {
-                        at24_HAL_WriteBytes(&hi2c1, command - BLE_CMD_SET, send_buff, EEPROM_CELL_SIZE);
+                        at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, (command - BLE_CMD_SET) * EEPROM_CELL_SIZE, send_buff, EEPROM_CELL_SIZE);
                         ILI9341_WriteString(left, step / 2 + (command - 6) * step, send_buff, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
                         ResetBLEReceiver();
                     }
@@ -597,7 +605,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
             {
                 if (buff[i + 1] == checksum) 
                 {
-                    at24_HAL_WriteBytes(&hi2c1, command - BLE_CMD_SET, send_buff, EEPROM_CELL_SIZE);
+                    at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, command - BLE_CMD_SET, send_buff, EEPROM_CELL_SIZE);
                     HAL_UART_Transmit_IT(&huart1, send_buff, 10);
                     ResetBLEReceiver();
                 }

@@ -236,6 +236,7 @@ void Error_Handler(void);
 
 #define EEPROM_CELL_SIZE 32
 #define EEPROM_BASE_ADDR 0xA0
+#define EEPROM_SERIAL_ADDR (BLE_CMD_GET + F_ID + 1) * EEPROM_CELL_SIZE
 
 //Биты статуса
 #define BODY_MOVE   1
@@ -266,13 +267,8 @@ void BluetoothCheck(void);
 uint8_t finder(uint8_t *buff, uint8_t *_string, uint8_t _char, uint16_t *num);
 uint8_t BLECommandsReceiver(uint8_t *buff);
 
-/* erase fmc page from FMC_WRITE_START_ADDR */
-void FmcErasePage(uint32_t page_address);
-/* program fmc word by word from FMC_WRITE_START_ADDR to FMC_WRITE_END_ADDR */
-/* check fmc erase result */
-void FmcErasePage_check(void);
 /* check fmc program result */
-void FmcSerialSendAT(void);
+void SendSerialAT(uint8_t *serial_buf);
 void GetNum();
 
 void WriteBackupRegister(uint16_t day, uint16_t month, uint16_t year);
