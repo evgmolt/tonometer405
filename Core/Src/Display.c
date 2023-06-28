@@ -187,7 +187,7 @@ void PrintError(uint8_t K){
     }
     if (K==ERROR_MEAS)
     {
-        sprintf(_buff,"Œÿ»¡ ¿ %d %d %d", PSys, PDia, pulse);        
+        sprintf(_buff,"Œÿ»¡ ¿ %d %d %d", p_sys, p_dia, pulse);        
 //        sprintf(_buff,"Œÿ»¡ ¿ »«Ã≈–≈Õ»ﬂ");        
         ILI9341_WriteString(left_margin, top_margin, _buff, Font_Arial, ILI9341_RED, ILI9341_WHITE);            
     }        
@@ -214,7 +214,6 @@ void PrintTime()
     RTC_DateTypeDef sDate = {0};
     HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
     
-    static uint32_t seconds;
     uint8_t buff[100]={0};
         
     sprintf(buff, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
@@ -260,7 +259,7 @@ void TFT_print(void)
     if (view_time)
     {
         PrintTime();
-        ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, SERIAL, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
+        ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, serial_num_string, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
     }
 }
 

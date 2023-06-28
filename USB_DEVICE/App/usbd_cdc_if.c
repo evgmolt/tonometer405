@@ -261,8 +261,8 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
-  USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+    USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+    USBD_CDC_ReceivePacket(&hUsbDeviceFS);
     usb_command = Buf[0];
     if (mode != PRESSURE_TEST) return 0;
     if (usb_command == USB_COMMAND_SET_RATE)
@@ -270,9 +270,6 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
         rate_whole = Buf[1];
         rate_fract = Buf[2];
         rate = rate_whole + rate_fract / 100;
-        //FmcProgramRate((uint32_t) rate_whole, (uint32_t) rate_fract);
-        mode = KEY_OFF;
-        DeviceOff();
     }
     if (usb_command == USB_COMMAND_GET_SERIAL)
     {

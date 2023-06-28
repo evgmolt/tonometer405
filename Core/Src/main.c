@@ -69,7 +69,7 @@ void SystemClock_Config(void);
 uint16_t pulse = 0;
 
 uint32_t *ptrd;
-uint8_t SERIAL[SERIAL_NUM_SIZE]   = {'T','O','N','0','2','0','2','2','2','0','0','1',0};
+uint8_t serial_num_string[SERIAL_NUM_SIZE]   = {'T','O','N','0','2','0','2','2','2','0','0','1',0};
 
 int16_t puls_buff_NEW[50]={0};
 int16_t puls_buff_AMP[50]={0};
@@ -78,15 +78,15 @@ int16_t puls_buff_IND_MIN[50]={0};
 
 uint16_t frequency=128;
 
-int16_t PSys = 0;
-int16_t PDia = 0;
-int16_t PMean;
-int indexPSys = 0;
-int indexPDia = 0;
-int16_t XMax;
+int16_t p_sys = 0;
+int16_t p_dia = 0;
+int16_t p_mean;
+int index_p_sys = 0;
+int index_p_dia = 0;
+int16_t x_max;
 int16_t current_pressure=0;
 int16_t i2c_out=0;
-int ZeroVal=0;
+int zero_value = 0;
 uint8_t indicate_charge_toggle=1;
 uint8_t indicate_charge_counter=1;
 uint8_t bluetooth_status=0;
@@ -98,7 +98,6 @@ uint8_t sim800_FLAG=0;
 uint8_t rang_batt_old=99;
 uint8_t send_buff[100]={0};
 uint8_t buff097[10]={0};
-//usb_dev usbd_cdc;
 uint16_t num_string=0;
 uint16_t count_send_bluetooth=0;
 short int ble_buffer[BLE_PACKET_SIZE] = {0};
@@ -114,9 +113,9 @@ int lock_counter = 0;
 
 uint8_t usb_command;
 
-double rate=18.1;
-double rate_whole;
-double rate_fract;
+float rate=18.1;
+float rate_whole;
+float rate_fract;
 
 bool arrhythmia = false;
 bool stop_meas = false;
@@ -182,7 +181,8 @@ int main(void)
   ILI9341_Init();
   InitADC();
   HAL_TIM_Base_Start_IT(&htim1);
-  at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, SERIAL, SERIAL_NUM_SIZE);
+  at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, serial_num_string, SERIAL_NUM_SIZE);
+  at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, rate, sizeof(float));
 
   /* USER CODE END 2 */
 
@@ -294,10 +294,12 @@ int main(void)
                 HAL_Delay(200);
 
                 PrintTime();
-                ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, SERIAL, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
+                ILI9341_WriteString(TIME_LEFT, TIME_TOP + 25, serial_num_string, Font_Arial, ILI9341_BLACK, ILI9341_WHITE);          
                 if (usb_command == USB_COMMAND_SET_RATE)
                 {   
                     rate = rate_whole + rate_fract / 100;
+                    at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, rate, sizeof(float));
+                    mode = KEY_OFF;
                 }
                 break;
             case MEASUREMENT:
@@ -368,17 +370,17 @@ int main(void)
                     pulse = CountPulse();    
                     GetSysDia();
                     status_byte=0;
-                    if (PSys > MIN_SYS & 
-                        PSys < MAX_SYS & 
-                        PDia > MIN_DIA & 
-                        PDia < MAX_DIA & 
+                    if (p_sys > MIN_SYS & 
+                        p_sys < MAX_SYS & 
+                        p_dia > MIN_DIA & 
+                        p_dia < MAX_DIA & 
                         pulse > MIN_PULSE & 
                         pulse < MAX_PULSE) 
                     {
                         PrintSYS_label(true);
                         PrintDIA_label(true);    
-                        PrintSYS(PSys);
-                        PrintDIA(PDia);                                    
+                        PrintSYS(p_sys);
+                        PrintDIA(p_dia);                                    
                         PrintNum((int16_t)pulse, BIG_NUM_RIGHT, PULSE_TOP, BLACK);
 
                         if (arrhythmia)
@@ -386,14 +388,14 @@ int main(void)
                             PrintHeartX3(true);
                             status_byte |= IRREG_PULSE;
                         }
-                        SendATCommand();
+                        SendResultAT();
                     }
                     else 
                     {
                         status_byte|=0x80;
                         PrintError(ERROR_MEAS);                            
                     }
-                    SendMeasurementResult((uint8_t)PSys, (uint8_t)PDia, (uint8_t)pulse,status_byte);
+                    SendMeasurementResult((uint8_t)p_sys, (uint8_t)p_dia, (uint8_t)pulse,status_byte);
                     
                     VALVE_FAST_OPEN;
                     VALVE_SLOW_OPEN;
@@ -410,9 +412,9 @@ int main(void)
                 break;
         }
         
-        if (UART0_count > 0)
+        if (uart1_count > 0)
         {                    
-           BLECommandsReceiver(UART0_buff);
+           BLECommandsReceiver(uart1_buff);
         }
         
         if (show_heart)
@@ -455,9 +457,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 96;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -472,7 +474,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -498,16 +500,16 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
     if (get_number_mode) 
     {
         get_number_mode = 0;
-        for (int i = 0; i < UART0_count; i++)
+        for (int i = 0; i < uart1_count; i++)
         {
-            SERIAL[i] = buff[i];
+            serial_num_string[i] = buff[i];
         }
-        SERIAL[UART0_count - 1] = 0;
-        UART0_count = 0;
+        serial_num_string[uart1_count - 1] = 0;
+        uart1_count = 0;
         return 0;
     }
 
-    for (int i = 0; i < UART0_count; i++)
+    for (int i = 0; i < uart1_count; i++)
     {
         checksum += buff[i];
         switch (byte_num)
@@ -545,10 +547,10 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                     {
                         for (uint8_t j = 0; j < 7; j++)
                         {
-                            SERIAL[j + 5] = send_buff[j]; //"TON02" уже в буфере. 
+                            serial_num_string[j + 5] = send_buff[j]; //"TON02" уже в буфере. 
                         }
-                        at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, SERIAL, SERIAL_NUM_SIZE);
-                        SendSerialAT(SERIAL);                        
+                        at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, serial_num_string, SERIAL_NUM_SIZE);
+                        SendSerialAT(serial_num_string);                        
                         HAL_Delay(200);                                    
                         DeviceOff();
                     }
@@ -579,7 +581,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
                         sprintf(timestr, "%02d:%02d:%02d  %02d.%02d.20%d", sTime.Hours, sTime.Minutes, sTime.Seconds, sDate.Date, sDate.Month, sDate.Year);
                         ILI9341_WriteString(TIME_LEFT, TIME_TOP, timestr, Font_Arial, ILI9341_RED, ILI9341_WHITE);  
                         ResetBLEReceiver();
-                        UART0_count = 0;
+                        uart1_count = 0;
                         return 1;
                     }
                 }                
@@ -613,7 +615,7 @@ uint8_t BLECommandsReceiver(uint8_t *buff)
         }
         index_in_packet++;
     }
-    UART0_count = 0;
+    uart1_count = 0;
 }
 
 void ResetBLEReceiver()
@@ -642,13 +644,18 @@ void SendMeasurementResult(int16_t sis, int16_t dia, int16_t pressure, int16_t b
     HAL_UART_Transmit_IT(&huart1, cur_buff, 14);
 }
 
-void SendATCommand()
+void SendResultAT()
 {
-    uint8_t len;
+    RTC_TimeTypeDef sTime = {0};
+    HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+    RTC_DateTypeDef sDate = {0};
+    HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+
     uint8_t buff[50] = {0};
-    sprintf(buff, "AT+RESULT=%02d.%02d.%02d_%02d:%02d:%d,%d,%d,%d,%d,%d\n", 5, 4, 2023, 8, 5, 30, PSys, PDia, PMean, pulse, status_byte);
-    len = strlen(buff);
-    HAL_UART_Transmit_IT(&huart1, buff, len);
+    sprintf(buff, "AT+RESULT=%02d.%02d.%02d_%02d:%02d:%d,%d,%d,%d,%d,%d\n", sDate.Date, sDate.Month, sDate.Year, 
+                                                                            sTime.Hours, sTime.Minutes, sTime.Seconds, 
+                                                                            p_sys, p_dia, p_mean, pulse, status_byte);
+    HAL_UART_Transmit_IT(&huart1, buff, strlen(buff));
 }
 
 void StopPumping()

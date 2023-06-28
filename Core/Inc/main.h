@@ -123,6 +123,8 @@ void Error_Handler(void);
 #define PB9_CHRG_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define DEBUG
+
 #define GREEN   0x1
 #define RED     0x2
 #define YELLOW  0x3
@@ -237,6 +239,7 @@ void Error_Handler(void);
 #define EEPROM_CELL_SIZE 32
 #define EEPROM_BASE_ADDR 0xA0
 #define EEPROM_SERIAL_ADDR (BLE_CMD_GET + F_ID + 1) * EEPROM_CELL_SIZE
+#define EEPROM_RATE_ADDR EEPROM_SERIAL_ADDR + SERIAL_NUM_SIZE
 
 //Биты статуса
 #define BODY_MOVE   1
@@ -256,7 +259,9 @@ void PrintNum(int16_t num, uint16_t X0, uint16_t Y0, uint8_t color);
 void DeviceOff(void);
 void Calibration(void);
 
-uint8_t usb_send_save(int16_t *mass1, int16_t *mass2);
+#ifdef DEBUG
+uint8_t USBSendSave(int16_t *mass1, int16_t *mass2);
+#endif
 
 void ClearScreen(void);
 void usb_send_16(short int T1, short int T2);
@@ -267,7 +272,6 @@ void BluetoothCheck(void);
 uint8_t finder(uint8_t *buff, uint8_t *_string, uint8_t _char, uint16_t *num);
 uint8_t BLECommandsReceiver(uint8_t *buff);
 
-/* check fmc program result */
 void SendSerialAT(uint8_t *serial_buf);
 void GetNum();
 
@@ -280,10 +284,8 @@ void PrintDIA(int16_t IN);
 void ResetBLEReceiver();
 void AbortMeas(void);
 void CreateJSON(void);
-void SendATCommand(void);
+void SendResultAT(void);
 void StopPumping(void);
-
-double ReadRateFromFmc();
 
 extern bool arrhythmia;
 extern bool stop_meas;
@@ -299,11 +301,11 @@ extern uint8_t view_time;
 extern const int lo_limit; //ms - 200 
 extern const int hi_limit; //ms - 30
 
-extern uint8_t UART1_buff[200];
-extern uint8_t UART1_count;
+extern uint8_t uart1_buff[200];
+extern uint8_t uart1_count;
 
-extern uint8_t UART0_buff[200];
-extern uint8_t UART0_count;
+extern uint8_t uart2_buff[200];
+extern uint8_t uart2_count;
 
 extern int16_t detect_level_start;
 extern double detect_level;
@@ -315,8 +317,6 @@ extern int16_t current_interval;
 extern double current_max;
 extern double global_max;
 extern uint8_t wave_detect_flag;
-extern int16_t Wave_detect_time;
-extern int16_t Wave_detect_time_OLD;
 extern bool show_heart;
 extern bool erase_heart;
 extern int16_t silence_time_start;
@@ -327,7 +327,7 @@ extern uint16_t pulse;
 
 extern uint32_t *ptrd;
 extern uint32_t address;
-extern uint8_t SERIAL[SERIAL_NUM_SIZE];
+extern uint8_t serial_num_string[SERIAL_NUM_SIZE];
 /* calculate the number of page to be programmed/erased */
 extern uint32_t page_num;
 
@@ -338,18 +338,18 @@ extern int16_t puls_buff_IND_MIN[50];
 
 extern uint16_t frequency;
 
-extern int16_t PSys;
-extern int16_t PDia;
-extern int16_t PMean;
+extern int16_t p_sys;
+extern int16_t p_dia;
+extern int16_t p_mean;
 
-extern int indexPSys;
-extern int indexPDia;
-extern int16_t XMax;
+extern int index_p_sys;
+extern int index_p_dia;
+extern int16_t x_max;
 
 extern int16_t current_pressure;
 
 extern int16_t i2c_out;
-extern int ZeroVal;
+extern int zero_value;
 extern uint8_t indicate_charge_toggle;
 extern uint8_t indicate_charge_counter;
 
@@ -385,9 +385,9 @@ extern uint32_t send_counter;
 
 extern int lock_counter;
 
-extern double rate;
-extern double rate_whole;
-extern double rate_fract;
+extern float rate;
+extern float rate_whole;
+extern float rate_fract;
 
 extern int shutdown_counter;
 extern int process_counter;

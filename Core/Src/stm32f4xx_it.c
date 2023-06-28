@@ -46,11 +46,11 @@
 const int lo_limit = 30;  // 256 bpm
 const int hi_limit = 250; // 30 bpm
 
-uint8_t UART1_buff[200]={0};
-uint8_t UART1_count=0;
+uint8_t uart1_buff[200]={0};
+uint8_t uart1_count=0;
 
-uint8_t UART0_buff[200]={0};
-uint8_t UART0_count=0;
+uint8_t uart2_buff[200]={0};
+uint8_t uart2_count=0;
 
 int16_t detect_level_start = 4;
 double detect_level = 4;
@@ -62,8 +62,8 @@ int16_t current_interval = 0;
 double current_max=0;
 double global_max=0;
 uint8_t wave_detect_flag=0;
-int16_t Wave_detect_time=0;
-int16_t Wave_detect_time_OLD=0;
+int16_t wave_detect_time=0;
+int16_t wave_detect_time_old=0;
 uint8_t wave_ind_flag=0;
 bool show_heart = false;
 bool erase_heart = false;
@@ -73,9 +73,6 @@ uint8_t puls_counter=0;
 
 int16_t dc_array_window = 30;
 int16_t ac_array_window = 4;
-
-uint8_t UART0_flag=0;
-
 
 int shutdown_counter = 0;
 int process_counter = 0;
@@ -353,20 +350,6 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
-
-  /* USER CODE END TIM2_IRQn 1 */
-}
-
-/**
-  * @brief This function handles USART1 global interrupt.
-  */
-void USART1_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART1_IRQn 0 */
-
-  /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart1);
-  /* USER CODE BEGIN USART1_IRQn 1 */
     static int32_t max_index;
     
     int16_t current_value;
@@ -493,12 +476,12 @@ void USART1_IRQHandler(void)
                             stop_meas = true;
                         }
                         first_max = max_index;
-                        Wave_detect_time_OLD = Wave_detect_time;
-                        Wave_detect_time = max_index - 1;                                                                                                                        
+                        wave_detect_time_old = wave_detect_time;
+                        wave_detect_time = max_index - 1;                                                                                                                        
                         puls_buff[puls_counter++]= max_index - 1;
                         heart_counter = HEART_INTERVAL;
                         show_heart = true;    
-                        lock_interval = (Wave_detect_time - Wave_detect_time_OLD) / 2;
+                        lock_interval = (wave_detect_time - wave_detect_time_old) / 2;
 //                            if (lock_interval > hi_limit | lock_interval < lo_limit) lock_interval = 50;
                         silence_time_start = max_index - 1;
                         detect_level = current_max * detect_levelCoeff;
@@ -524,7 +507,7 @@ void USART1_IRQHandler(void)
             PUMP_OFF;
         }
         else
-        if (usb_send_save(pressure_pulsation_array,envelope_array))
+        if (USBSendSave(pressure_pulsation_array,envelope_array))
         {            
             mode = INIT_START;
             HAL_TIM_Base_Stop_IT(&htim2);
@@ -541,10 +524,24 @@ void USART1_IRQHandler(void)
         if (send_serial_now)
         {
             send_serial_now = 0;
-            CDC_Transmit_FS(SERIAL, SERIAL_NUM_SIZE);
+            CDC_Transmit_FS(serial_num_string, SERIAL_NUM_SIZE);
             allow_send_data = 1;
         }
     }
+
+  /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */
 }
@@ -592,6 +589,7 @@ void OTG_FS_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+
 void Lock(void)
 {
     lock_counter = LOCK_INTERVAL;
@@ -602,7 +600,7 @@ bool GetADCData(bool save)
 {
     HAL_StatusTypeDef result = GetADCValue();
     if (result != HAL_OK) return false;
-    uint16_t current_value = ADS1115_value - ZeroVal;
+    uint16_t current_value = ADS1115_value - zero_value;
     current_pressure = current_value / rate;
     RequestADC();
     if (!save) return true;
@@ -625,32 +623,34 @@ void Calibration()
             divisor++;
         }
     }
-    ZeroVal = sum / divisor;
+    zero_value = sum / divisor;
 }
 
-uint8_t usb_send_save(int16_t *mass1, int16_t *mass2)
+#ifdef DEBUG
+uint8_t USBSendSave(int16_t *mass1, int16_t *mass2)
 {
     //Add markers of SYS, MAX and DIA points into array
-    for (int h=0;h<puls_counter;h++)
+    for (int h = 0; h < puls_counter; h++)
     {
-            if (send_counter==XMax) pressure_pulsation_array[send_counter]=100;                    
+            if (send_counter == x_max) pressure_pulsation_array[send_counter] = 100;                    
     }        
-    for (int h=0;h<puls_counter;h++)
+    for (int h = 0; h < puls_counter; h++)
     {
-            if (send_counter==indexPSys | send_counter==indexPDia) pressure_pulsation_array[send_counter]=-100;                    
+            if (send_counter == index_p_sys | send_counter == index_p_dia) pressure_pulsation_array[send_counter] = -100;                    
     }        
     
-    uint8_t send_H1=(mass1[send_counter]>>8)&0xFF;
-    uint8_t send_L1=mass1[send_counter]&0xFF;
-    uint8_t send_H2=(mass2[send_counter]>>8)&0xFF;
-    uint8_t send_L2=mass2[send_counter]&0xFF;
+    uint8_t send_H1 = (mass1[send_counter] >> 8) & 0xFF;
+    uint8_t send_L1 = mass1[send_counter] & 0xFF;
+    uint8_t send_H2 = (mass2[send_counter] >> 8) & 0xFF;
+    uint8_t send_L2 = mass2[send_counter] & 0xFF;
     
-    uint8_t send_buff[5]={25,send_L1,send_H1,send_L2,send_H2};
-//    usbd_ep_send (&usbd_cdc, CDC_IN_EP, send_buff, 5);
+    uint8_t send_buff[5] = {25, send_L1, send_H1, send_L2, send_H2};
+    CDC_Transmit_FS(send_buff, 5);
     send_counter++;
     if (send_counter >= total_size) return 1;
     else return 0;
 }
+#endif
 
 //‘ункци€ используетс€ при втором проходе по массиву пульсаций давлени€, когда уже известно положение максимума.
 //ƒо максимума используетс€ detect_levelCoeff, а после detect_levelCoeffDia, так как скорость спада амплитуд пульсаций
@@ -678,10 +678,10 @@ void Detect(int32_t x_max, uint16_t index)
         else if (current_value < detect_level)
         {
             global_max = fmax(global_max, current_max);
-            Wave_detect_time_OLD = Wave_detect_time;
-            Wave_detect_time = index_of_max - 1;                                                                                                                        
+            wave_detect_time_old = wave_detect_time;
+            wave_detect_time = index_of_max - 1;                                                                                                                        
             puls_buff[puls_counter++] = index_of_max-1;
-            lock_interval=(Wave_detect_time - Wave_detect_time_OLD) / 2;
+            lock_interval=(wave_detect_time - wave_detect_time_old) / 2;
             silence_time_start = index_of_max - 1;
             if (index < x_max) coeff = detect_levelCoeff; else coeff = detect_levelCoeffDia;
             detect_level = current_max * coeff;
@@ -698,8 +698,8 @@ void ResetDetector(void)
     process_counter = 0;
     main_index=0;        
     wave_detect_flag=0;    
-    Wave_detect_time = 0;
-    Wave_detect_time_OLD = 0;
+    wave_detect_time = 0;
+    wave_detect_time_old = 0;
     current_max=0;        
     global_max=0;        
     detect_level=detect_level_start;

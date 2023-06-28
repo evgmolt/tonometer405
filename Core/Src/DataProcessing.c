@@ -131,7 +131,7 @@ int GetMinIndexInRegion(int16_t *sourceArray_MIN,int index)
 void f_sorting_MAX(void){
         int16_t MaximumAmplitude=-100;
         uint8_t FLAG=1;    
-        uint16_t mini_XMAX=0;
+        uint16_t mini_x_max=0;
         int16_t z=0;
         uint8_t buff1[10]={0};        
         
@@ -150,13 +150,13 @@ void f_sorting_MAX(void){
         for (int i=0; i<puls_counter; i++){
                 if (puls_buff_AMP[i]>MaximumAmplitude){
                         MaximumAmplitude=puls_buff_AMP[i];                            
-                        mini_XMAX=i;
+                        mini_x_max=i;
                 }        
         }            
         
         while (FLAG==1){
                 FLAG=0;
-                for (int i=1; i<mini_XMAX; i++){
+                for (int i=1; i<mini_x_max; i++){
                         if (puls_buff_AMP[i-1]>puls_buff_AMP[i]){
                                 z=puls_buff_AMP[i-1];
                                 puls_buff_AMP[i-1]=puls_buff_AMP[i];
@@ -169,7 +169,7 @@ void f_sorting_MAX(void){
         FLAG=1;
         while (FLAG==1){
                 FLAG=0;
-                for (int i=mini_XMAX+2; i<puls_counter; i++){
+                for (int i=mini_x_max+2; i<puls_counter; i++){
                         if (puls_buff_AMP[i-1]<puls_buff_AMP[i]){
                                 z=puls_buff_AMP[i-1];
                                 puls_buff_AMP[i-1]=puls_buff_AMP[i];
@@ -237,7 +237,7 @@ void GetSysDia(void)
         if (puls_buff_AMP[i] > MaximumAmplitude)
         {
             MaximumAmplitude = puls_buff_AMP[i];
-            XMax = puls_buff_NEW[i];      
+            x_max = puls_buff_NEW[i];      
             index_of_max = i;
         }        
     }        
@@ -245,9 +245,9 @@ void GetSysDia(void)
     int16_t ValueSys = SYS_COEF * MaximumAmplitude;
     int16_t ValueDia = DIA_COEF * MaximumAmplitude;
 
-    PSys = 0;
-    PDia = 0;
-    PMean = GetAverAroundPoint(pressure_array, XMax) / rate;
+    p_sys = 0;
+    p_dia = 0;
+    p_mean = GetAverAroundPoint(pressure_array, x_max) / rate;
 /*    
     for (int i = index_of_max; i >= 0; i--)
     {
@@ -261,37 +261,37 @@ void GetSysDia(void)
             coeff = coeff / (x2 - x1);
             xSys = x1 + ValueSys * coeff;
             PSys = (p1 + coeff * (xSys - x1)) / rate;
-            indexPSys = i;
+            index_p_sys = i;
             break;
         }
     }
     */
-    for (int i = XMax; i >= 0; i--)
+    for (int i = x_max; i >= 0; i--)
     {
         if (envelope_array[i] < ValueSys)
         {
-            PSys = GetAverAroundPoint(pressure_array, i) / rate;
-            indexPSys = i;
+            p_sys = GetAverAroundPoint(pressure_array, i) / rate;
+            index_p_sys = i;
             break;
         }
     }
-    if (PSys == 0)
+    if (p_sys == 0)
     {
-        PSys = pressure_array[0] / rate;        
+        p_sys = pressure_array[0] / rate;        
     }
 
-    for (int i = XMax; i < main_index; i++)
+    for (int i = x_max; i < main_index; i++)
     {
         if (envelope_array[i] < ValueDia)
         {
-            PDia = GetAverAroundPoint(pressure_array, i) / rate;
-            indexPDia = i;
+            p_dia = GetAverAroundPoint(pressure_array, i) / rate;
+            index_p_dia = i;
             break;
         }
     }
-    if (PDia == 0)
+    if (p_dia == 0)
     {
-        PDia = pressure_array[main_index - 1] / rate;
+        p_dia = pressure_array[main_index - 1] / rate;
     }
 }
 
