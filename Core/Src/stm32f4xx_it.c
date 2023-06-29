@@ -33,7 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define UART_BUF_SIZE 200
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -46,10 +46,10 @@
 const int lo_limit = 30;  // 256 bpm
 const int hi_limit = 250; // 30 bpm
 
-uint8_t uart1_buff[200]={0};
+uint8_t uart1_buff[UART_BUF_SIZE]={0};
 uint8_t uart1_count=0;
 
-uint8_t uart2_buff[200]={0};
+uint8_t uart2_buff[UART_BUF_SIZE]={0};
 uint8_t uart2_count=0;
 
 int16_t detect_level_start = 4;
@@ -539,10 +539,17 @@ void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
 
+    if(__HAL_UART_GET_IT_SOURCE(&huart1, UART_IT_RXNE) != RESET)
+    {
+        uart1_buff[uart1_count] = (uint8_t)(USART1->DR & 0x00FF);
+        uart1_count++;
+        if (uart1_count = UART_BUF_SIZE) uart1_count = 0;
+        __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+    }    
+    
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-
   /* USER CODE END USART1_IRQn 1 */
 }
 
@@ -552,6 +559,14 @@ void USART1_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
+
+    if(__HAL_UART_GET_IT_SOURCE(&huart2, UART_IT_RXNE) != RESET)
+    {
+        uart2_buff[uart2_count] = (uint8_t)(USART2->DR & 0x00FF);
+        uart2_count++;
+        if (uart2_count = UART_BUF_SIZE) uart2_count = 0;
+        __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+    }    
 
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);

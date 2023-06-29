@@ -274,9 +274,8 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
     if (usb_command == USB_COMMAND_GET_SERIAL)
     {
         send_serial_now = 1;
-    }
-  
-  return (USBD_OK);
+    }  
+    return (USBD_OK);
   /* USER CODE END 6 */
 }
 

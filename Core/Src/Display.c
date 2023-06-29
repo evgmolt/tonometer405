@@ -247,14 +247,14 @@ void TFT_print(void)
     else if (batt_level < BATT_RANG_2 & batt_level > BATT_RANG_1) rang_batt=1;
     else if (batt_level < BATT_RANG_1)    rang_batt=0;
             
-    if (rang_batt_old!=rang_batt)
+    if (rang_batt_old != rang_batt)
     {    
         ILI9341_DrawImage(6, 285, 44, 24, (const uint16_t*)bat_clr);            
         for (int i1=0;i1<rang_batt;i1++)
         {
                 ILI9341_DrawImage(42-i1*8, 286, 7, 22, (const uint16_t*)bat_dif);
         }
-        rang_batt_old=rang_batt;
+        rang_batt_old = rang_batt;
     }
     if (view_time)
     {

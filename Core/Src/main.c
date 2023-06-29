@@ -84,30 +84,30 @@ int16_t p_mean;
 int index_p_sys = 0;
 int index_p_dia = 0;
 int16_t x_max;
-int16_t current_pressure=0;
-int16_t i2c_out=0;
+int16_t current_pressure = 0;
+int16_t i2c_out = 0;
 int zero_value = 0;
-uint8_t indicate_charge_toggle=1;
-uint8_t indicate_charge_counter=1;
-uint8_t bluetooth_status=0;
-uint8_t status_byte=0;
+uint8_t indicate_charge_toggle = 1;
+uint8_t indicate_charge_counter = 1;
+uint8_t bluetooth_status = 0;
+uint8_t status_byte = 0;
 uint8_t mode = INIT_START;
 bool ble_data_ready = false;
 uint8_t ble_buffer_counter = 0;
 uint8_t sim800_FLAG=0;
-uint8_t rang_batt_old=99;
+uint8_t rang_batt_old = 99;
 uint8_t send_buff[100]={0};
 uint8_t buff097[10]={0};
 uint16_t num_string=0;
 uint16_t count_send_bluetooth=0;
 short int ble_buffer[BLE_PACKET_SIZE] = {0};
-short int pressure_array[MAIN_ARRAY_SIZE]={0};
+short int pressure_array[MAIN_ARRAY_SIZE] = {0};
 uint32_t main_index = 0;
 uint32_t first_max;
 uint32_t total_size = 0;
-short int pressure_pulsation_array[MAIN_ARRAY_SIZE]={0};
-short int envelope_array[MAIN_ARRAY_SIZE]={0};
-uint32_t send_counter=0;
+short int pressure_pulsation_array[MAIN_ARRAY_SIZE] = {0};
+short int envelope_array[MAIN_ARRAY_SIZE] = {0};
+uint32_t send_counter = 0;
 
 int lock_counter = 0;
 
@@ -281,7 +281,6 @@ int main(void)
                 break;
             case USB_CHARGING:
                 shutdown_counter = 0;
-                if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)==0) indicate_charge_toggle=1; //Не работает
                 PrintBattCharge();                
                 HAL_Delay(1500);                
                 if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10)==0) DeviceOff();                        
@@ -298,7 +297,7 @@ int main(void)
                 if (usb_command == USB_COMMAND_SET_RATE)
                 {   
                     rate = rate_whole + rate_fract / 100;
-                    at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, rate, sizeof(float));
+                    at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, rate, sizeof(float));
                     mode = KEY_OFF;
                 }
                 break;
