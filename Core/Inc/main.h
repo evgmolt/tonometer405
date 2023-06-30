@@ -215,6 +215,7 @@ void Error_Handler(void);
 #define TIME_LEFT 10
 
 #define MAIN_ARRAY_SIZE 10000
+#define SIM800_BUFFER_SIZE 1000
 
 #define DERIVATIVE_SHIFT 13
 #define DERIVATIVE_AVER_WIDTH 4
@@ -236,7 +237,7 @@ void Error_Handler(void);
 #define F_POINT    4
 #define F_ID       5
 
-#define EEPROM_CELL_SIZE 32
+#define EEPROM_CELL_SIZE 0xFF
 #define EEPROM_BASE_ADDR 0xA0
 #define EEPROM_SERIAL_ADDR (BLE_CMD_GET + F_ID + 1) * EEPROM_CELL_SIZE
 #define EEPROM_RATE_ADDR EEPROM_SERIAL_ADDR + SERIAL_NUM_SIZE
@@ -270,6 +271,7 @@ void BootMode(void);
 void PrintBattCharge(void);
 void BluetoothCheck(void);
 uint8_t finder(uint8_t *buff, uint8_t *_string, uint8_t _char, uint16_t *num);
+uint8_t SIM800Receiver(uint8_t *buff);
 uint8_t BLECommandsReceiver(uint8_t *buff);
 
 void SendSerialAT(uint8_t *serial_buf);
@@ -382,6 +384,10 @@ extern short int pressure_pulsation_array[MAIN_ARRAY_SIZE];
 extern short int envelope_array[MAIN_ARRAY_SIZE];
 
 extern uint32_t send_counter;
+
+extern uint8_t sim800_buffer[SIM800_BUFFER_SIZE];
+extern uint16_t sim800_buf_counter;
+extern uint8_t brace_counter;
 
 extern int lock_counter;
 

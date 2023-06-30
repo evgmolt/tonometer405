@@ -109,6 +109,10 @@ short int pressure_pulsation_array[MAIN_ARRAY_SIZE] = {0};
 short int envelope_array[MAIN_ARRAY_SIZE] = {0};
 uint32_t send_counter = 0;
 
+uint8_t sim800_buffer[SIM800_BUFFER_SIZE] = {0};
+uint16_t sim800_buf_counter;
+uint8_t brace_counter;
+
 int lock_counter = 0;
 
 uint8_t usb_command;
@@ -183,6 +187,9 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim1);
   at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, serial_num_string, SERIAL_NUM_SIZE);
   at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, rate, sizeof(float));
+
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE); //М.б. не нужно? Проверить
+  __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE); //М.б. не нужно? Проверить
 
   /* USER CODE END 2 */
 
@@ -412,8 +419,17 @@ int main(void)
         }
         
         if (uart1_count > 0)
-        {                    
+        {    
+           __HAL_UART_DISABLE_IT(&huart1, UART_IT_RXNE);
            BLECommandsReceiver(uart1_buff);
+           __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+        }
+        
+        if (uart2_count > 0)
+        {
+           __HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
+           SIM800Receiver(uart2_buff);
+           __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
         }
         
         if (show_heart)
@@ -488,7 +504,25 @@ void SendSerialAT(uint8_t *serial_buf)
     strncat(cur_buff, "\n", 2);
     HAL_UART_Transmit_IT(&huart1, cur_buff, strlen(cur_buff));
 }
-    
+
+uint8_t SIM800Receiver(uint8_t *buff)
+{
+    for (int i = 0; i < uart2_count; i++)
+    {
+        char c = buff[i];
+        sim800_buffer[sim800_buf_counter] = c;
+        sim800_buf_counter++;
+        if (c == '{') brace_counter++;
+        if (c == '}') brace_counter--;
+        if (brace_counter == 0)
+        {
+            GetToken(sim800_buffer);
+            GetPatientId(sim800_buffer);
+        }
+    }
+    uart2_count = 0;
+}
+
 uint8_t BLECommandsReceiver(uint8_t *buff)
 {
     const uint8_t top = 20;

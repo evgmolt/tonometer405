@@ -415,16 +415,6 @@
               <FilePath>..\Core\Src\GSM.c</FilePath>
             </File>
             <File>
-              <FileName>jWrite.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\jWrite.c</FilePath>
-            </File>
-            <File>
-              <FileName>jsmn.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\jsmn.h</FilePath>
-            </File>
-            <File>
               <FileName>ili9341.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ili9341.c</FilePath>
@@ -2321,6 +2311,26 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>HTTP</GroupName>
+          <Files>
+            <File>
+              <FileName>jsmn.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\jsmn.h</FilePath>
+            </File>
+            <File>
+              <FileName>jWrite.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\jWrite.c</FilePath>
+            </File>
+            <File>
+              <FileName>http_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\http_utils.c</FilePath>
             </File>
           </Files>
         </Group>

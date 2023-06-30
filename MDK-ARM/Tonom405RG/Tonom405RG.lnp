@@ -4,7 +4,6 @@
 "tonom405rg\dataprocessing.o"
 "tonom405rg\display.o"
 "tonom405rg\gsm.o"
-"tonom405rg\jwrite.o"
 "tonom405rg\ili9341.o"
 "tonom405rg\main.o"
 "tonom405rg\gpio.o"
@@ -57,6 +56,8 @@
 "tonom405rg\usbd_ctlreq.o"
 "tonom405rg\usbd_ioreq.o"
 "tonom405rg\usbd_cdc.o"
+"tonom405rg\jwrite.o"
+"tonom405rg\http_utils.o"
 --strict --scatter "Tonom405RG\Tonom405RG.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

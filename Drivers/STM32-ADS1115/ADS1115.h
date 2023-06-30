@@ -17,7 +17,7 @@
 
 extern uint16_t ADS1115_value;
 
-void InitADC        ();
+void InitADC();
 void RequestADC();
 HAL_StatusTypeDef GetADCValue();
 void WriteRegister(uint8_t registerAddr, uint16_t data);
