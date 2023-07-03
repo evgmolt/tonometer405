@@ -413,6 +413,8 @@ int main(void)
                 }                    
                 BluetoothCheck();
                 break;
+            case SEND_HTTP:
+                break;
             case SEND_SAVE_BUFF_MSG:
                 shutdown_counter = 0;
                 break;

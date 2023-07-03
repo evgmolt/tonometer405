@@ -154,7 +154,8 @@ void Error_Handler(void);
 #define USB_CHARGING 4
 #define PRESSURE_TEST 5
 #define MEASUREMENT 6
-#define SEND_SAVE_BUFF_MSG 7
+#define SEND_HTTP 7
+#define SEND_SAVE_BUFF_MSG 8
 
 #define STOP_MEAS_LEVEL 60
 #define MIN_PRESSURE 130    
