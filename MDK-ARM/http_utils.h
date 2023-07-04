@@ -10,7 +10,8 @@
 const char http_init[];
 const char http_cid[];
 const char http_url[BUF_LEN];
-const char http_json[];
+const char http_content_plain[];
+const char http_content_json[];
 const char http_token[LONG_BUF_LEN];
 const char http_len[];
 const char http_post[];
@@ -23,7 +24,7 @@ const char login_route[];
 const char measurement_route[];
 
 extern char token[BUF_LEN];
-extern char id[10];
+extern char id[6];
 extern char login_body[BUF_LEN];
 extern char measurement_body[LONG_BUF_LEN];
 
@@ -32,7 +33,7 @@ extern char e_pass[EEPROM_CELL_SIZE];
 extern char e_url[EEPROM_CELL_SIZE];
 extern char e_point[EEPROM_CELL_SIZE];
 
-uint8_t SendResultHttp(uint16_t p_sys, uint16_t p_dya, uint16_t pulse);
+uint8_t SendResultHttp(uint16_t p_sys, uint16_t p_dia, uint16_t pulse);
 
 uint8_t InitGprs();
 uint8_t SendLogin();

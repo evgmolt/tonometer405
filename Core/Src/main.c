@@ -402,7 +402,7 @@ int main(void)
                         PrintError(ERROR_MEAS);                            
                     }
                     SendMeasurementResult((uint8_t)p_sys, (uint8_t)p_dia, (uint8_t)pulse,status_byte);
-                    
+                    SendResultHttp(p_sys, p_dia, pulse);
                     VALVE_FAST_OPEN;
                     VALVE_SLOW_OPEN;
 #ifdef DEBUG                    
@@ -412,8 +412,6 @@ int main(void)
 #endif                    
                 }                    
                 BluetoothCheck();
-                break;
-            case SEND_HTTP:
                 break;
             case SEND_SAVE_BUFF_MSG:
                 shutdown_counter = 0;
@@ -425,13 +423,6 @@ int main(void)
            __HAL_UART_DISABLE_IT(&huart1, UART_IT_RXNE);
            BLECommandsReceiver(uart1_buff);
            __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
-        }
-        
-        if (uart2_count > 0)
-        {
-           __HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
-           SIM800Receiver(uart2_buff);
-           __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
         }
         
         if (show_heart)
@@ -507,23 +498,6 @@ void SendSerialAT(uint8_t *serial_buf)
     HAL_UART_Transmit_IT(&huart1, cur_buff, strlen(cur_buff));
 }
 
-uint8_t SIM800Receiver(uint8_t *buff)
-{
-    for (int i = 0; i < uart2_count; i++)
-    {
-        char c = buff[i];
-        sim800_buffer[sim800_buf_counter] = c;
-        sim800_buf_counter++;
-        if (c == '{') brace_counter++;
-        if (c == '}') brace_counter--;
-        if (brace_counter == 0)
-        {
-            GetToken(sim800_buffer);
-            GetPatientId(sim800_buffer);
-        }
-    }
-    uart2_count = 0;
-}
 
 uint8_t BLECommandsReceiver(uint8_t *buff)
 {

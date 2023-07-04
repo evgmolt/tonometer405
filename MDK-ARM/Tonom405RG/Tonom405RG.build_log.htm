@@ -27,23 +27,11 @@ Project File Date:  07/03/2023
 <h2>Output:</h2>
 *** Using Compiler 'V6.18', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Tonom405RG'
-http_utils.c(80): error: use of undeclared identifier 'login_body'; did you mean 'login_route'?
-    sprintf(common_buf, "%s%d%s", http_len, strlen(login_body), WAIT_TIME);
-                                                   ^~~~~~~~~~
-                                                   login_route
-http_utils.c(25): note: 'login_route' declared here
-const char login_route[] = "/api/v3/users/login";
-           ^
-http_utils.c(82): error: use of undeclared identifier 'login_body'; did you mean 'login_route'?
-    if (SendDataWaitOk(login_body) != HAL_OK) return HAL_ERROR;
-                       ^~~~~~~~~~
-                       login_route
-http_utils.c(25): note: 'login_route' declared here
-const char login_route[] = "/api/v3/users/login";
-           ^
-2 errors generated.
 compiling http_utils.c...
-"Tonom405RG\Tonom405RG.axf" - 2 Error(s), 0 Warning(s).
+linking...
+Program Size: Code=71976 RO-data=458068 RW-data=324 ZI-data=91916  
+FromELF: creating hex file...
+"Tonom405RG\Tonom405RG.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -67,7 +55,6 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Target not created.
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

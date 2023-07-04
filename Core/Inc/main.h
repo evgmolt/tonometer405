@@ -272,7 +272,6 @@ void BootMode(void);
 void PrintBattCharge(void);
 void BluetoothCheck(void);
 uint8_t finder(uint8_t *buff, uint8_t *_string, uint8_t _char, uint16_t *num);
-uint8_t SIM800Receiver(uint8_t *buff);
 uint8_t BLECommandsReceiver(uint8_t *buff);
 
 void SendSerialAT(uint8_t *serial_buf);

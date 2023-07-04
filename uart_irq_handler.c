@@ -17,3 +17,12 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 1 */
 }
 
+//---------main--------------
+
+        if (uart2_count > 0)
+        {
+           __HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
+           SIM800Receiver(uart2_buff);
+           __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+        }
+        

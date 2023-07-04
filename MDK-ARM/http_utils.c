@@ -13,7 +13,8 @@ const char gprs_disconnect[] = "AT+SAPBR=2,1";
 const char http_init[] = "AT+HTTPINIT";
 const char http_cid[] = "AT+HTTPPARA=CID,1";
 const char http_url[] = "AT+HTTPPARA=\"URL\","; //"http://bp-technopark.mdapp.online/api/v3/users/login"
-const char http_json[] = "AT+HTTPPARA=\"CONTENT\",\"application/json\"";
+const char http_content_plain[] = "AT+HTTPPARA=\"CONTENT\",\"text/plain\"";
+const char http_content_json[] = "AT+HTTPPARA=\"CONTENT\",\"application/json\"";
 const char http_token[] = "AT+HTTPPARA=\"USERDATA\",\"Authorization:Bearer \""; // здесь токен вроде бы
 const char http_len[] = "AT+HTTPDATA="; //Длина строки, время ожидания
 //{"app.username":"102@samsmu.ru","app.password":"aTXGZYqFhs"}
@@ -36,22 +37,20 @@ char e_pass[EEPROM_CELL_SIZE];
 char e_url[EEPROM_CELL_SIZE];
 char e_point[EEPROM_CELL_SIZE];
 
-uint8_t SendResultHttp(uint16_t p_sys, uint16_t p_dya, uint16_t pulse)
+uint8_t SendResultHttp(uint16_t p_sys, uint16_t p_dia, uint16_t pulse)
 {
     if (InitGprs() != HAL_OK) return HAL_ERROR;
     if (SendLogin() != HAL_OK) return HAL_ERROR;
     uint16_t size;
+    for (int i = 0; i < sizeof(common_buf); i++) common_buf[i] = 0;
     if (HAL_UARTEx_ReceiveToIdle(&huart2, common_buf, sizeof(common_buf), size, RECEIVE_TIMEOUT) != HAL_OK) return HAL_ERROR; //Получаем ответ сервера
     if (GetToken(common_buf) == 0) return HAL_ERROR; //Извлекаем токен
     if (GetPatientId(common_buf) == 0) return HAL_ERROR; //Извлекаем ID
-    strcpy(common_buf, http_url);
-    strncat(common_buf, e_url, EEPROM_CELL_SIZE);
-    strcat(common_buf, measurement_route);
-    strcat(common_buf, patient_id);
+	sprintf(common_buf, "%s\"%s%s%s\"", http_url, e_url, measurement_route, patient_id);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_json);
+    strcpy(common_buf, http_content_json);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcopy(common_buf, http_token);
+    strcpy(common_buf, http_token);
     strcat(common_buf, token);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
     RTC_TimeTypeDef sTime = {0};
@@ -61,16 +60,19 @@ uint8_t SendResultHttp(uint16_t p_sys, uint16_t p_dya, uint16_t pulse)
     CreateMeasurementBody(atoi(patient_id), p_sys, p_dia, pulse, sTime, sDate);
     if (SendDataWaitOk(measurement_body) != HAL_OK) return HAL_ERROR;
     if (SendDataWaitOk(http_post) != HAL_OK) return HAL_ERROR;
-    return SendDataWaitOk(http_read);
+    strcpy(common_buf, http_term); //закрываем http
+    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;    
+    strcpy(common_buf, gprs_disconnect); //закрываем gprs
+    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;    
+    return HAL_OK;
 }
 
 uint8_t InitGprs()
 {
     strcpy(common_buf, gprs_cont);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, gprs_apn);
-    ReadFromEEPROM();
-    strncat(common_buf, e_point, EEPROM_CELL_SIZE);
+     ReadFromEEPROM();
+	sprintf(common_buf, "%s\"%s\"", gprs_apn, e_point);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
     strcpy(common_buf, gprs_connect);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
@@ -84,11 +86,9 @@ uint8_t SendLogin()
     strcpy(common_buf, http_cid);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
     ReadFromEEPROM();
-    strcpy(common_buf, http_url);
-    strncat(common_buf, e_url, EEPROM_CELL_SIZE);
-    strcat(common_buf, login_route);
+	sprintf(common_buf, "%s\"%s%s\"", http_url, e_url, login_route);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_json);
+    strcpy(common_buf, http_content_json); // plain??
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
     CreateLoginBody(login_body);
     sprintf(common_buf, "%s%d%s", http_len, strlen(login_body), WAIT_TIME);
@@ -206,7 +206,7 @@ uint16_t FindIndex(char* buff, char* string_to_find)
 	uint16_t index = 0;
 	uint16_t str_length;
 	str_length = strlen(string_to_find);
-	while (ind < sizeof(buff))
+	while (ind < LONG_BUF_LEN)
 	{
 		if (buff[ind] == string_to_find[index])
 		{
