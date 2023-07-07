@@ -80,12 +80,19 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle)
     PA11     ------> USB_OTG_FS_DM
     PA12     ------> USB_OTG_FS_DP
     */
-    GPIO_InitStruct.Pin = PA11_0D__Pin|PA_12_0D__Pin;
+    GPIO_InitStruct.Pin = PA11_0D__Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    HAL_GPIO_Init(PA11_0D__GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = PA_12_0D__Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
+    HAL_GPIO_Init(PA_12_0D__GPIO_Port, &GPIO_InitStruct);
 
     /* Peripheral clock enable */
     __HAL_RCC_USB_OTG_FS_CLK_ENABLE();

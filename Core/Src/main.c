@@ -117,7 +117,7 @@ int lock_counter = 0;
 
 uint8_t usb_command;
 
-float rate=18.1;
+float rate=24.1;
 float rate_whole;
 float rate_fract;
 

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [Tonom405RG\Tonom405RG.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image Tonom405RG\Tonom405RG.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6180002: Last Updated: Fri Jul  7 09:47:21 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6180002: Last Updated: Fri Jul  7 12:19:35 2023
 <BR><P>
 <H3>Maximum Stack Usage =       1056 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1537,6 +1537,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[16e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USB_SetCurrentMode
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BLECommandsReceiver
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Calibration
+<LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USB_DEVICE_Init
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[1b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ILI9341_Init
 <LI><a href="#[1b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ILI9341_Reset
@@ -1549,6 +1550,7 @@ Global Symbols
 <LI><a href="#[18d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 <LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_MspInit
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
+<LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USB_DEVICE_Init
 <LI><a href="#[1c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_PCD_MspInit
 </UL>
@@ -1569,6 +1571,7 @@ Global Symbols
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AbortMeas
 <LI><a href="#[1e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StopPumping
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DeviceOff
+<LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USB_DEVICE_Init
 <LI><a href="#[1c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[1b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ILI9341_WriteData
@@ -1904,8 +1907,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[20b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USBD_LL_Init
 </UL>
 
-<P><STRONG><a name="[16b]"></a>HAL_PCD_MspInit</STRONG> (Thumb, 176 bytes, Stack size 48 bytes, usbd_conf.o(.text.HAL_PCD_MspInit))
-<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = HAL_PCD_MspInit &rArr; HAL_NVIC_SetPriority &rArr; NVIC_EncodePriority
+<P><STRONG><a name="[16b]"></a>HAL_PCD_MspInit</STRONG> (Thumb, 224 bytes, Stack size 64 bytes, usbd_conf.o(.text.HAL_PCD_MspInit))
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = HAL_PCD_MspInit &rArr; HAL_NVIC_SetPriority &rArr; NVIC_EncodePriority
 </UL>
 <BR>[Calls]<UL><LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
@@ -2583,10 +2586,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[1cc]"></a>MX_USB_DEVICE_Init</STRONG> (Thumb, 118 bytes, Stack size 8 bytes, usb_device.o(.text.MX_USB_DEVICE_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = MX_USB_DEVICE_Init &rArr; USBD_Init &rArr; USBD_LL_Init &rArr; HAL_PCD_Init &rArr; USB_DevInit &rArr; USB_FlushTxFifo
+<P><STRONG><a name="[1cc]"></a>MX_USB_DEVICE_Init</STRONG> (Thumb, 206 bytes, Stack size 48 bytes, usb_device.o(.text.MX_USB_DEVICE_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 352<LI>Call Chain = MX_USB_DEVICE_Init &rArr; USBD_Init &rArr; USBD_LL_Init &rArr; HAL_PCD_Init &rArr; USB_DevInit &rArr; USB_FlushTxFifo
 </UL>
-<BR>[Calls]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
+<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[1d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USBD_Start
 <LI><a href="#[1cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USBD_CDC_RegisterInterface
 <LI><a href="#[1ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USBD_RegisterClass
