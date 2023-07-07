@@ -173,7 +173,6 @@ int main(void)
   MX_DMA_Init();
   MX_RTC_Init();
   MX_ADC1_Init();
-  MX_TIM1_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   MX_IWDG_Init();
@@ -181,15 +180,33 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   MX_USB_DEVICE_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   ILI9341_Init();
   InitADC();
-  HAL_TIM_Base_Start_IT(&htim1);
+  HAL_TIM_Base_Start_IT(&htim2);
+  HAL_TIM_Base_Start_IT(&htim3);
+
+    
+/*  at24_HAL_WriteBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, serial_num_string, SERIAL_NUM_SIZE);
+
   at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_SERIAL_ADDR, serial_num_string, SERIAL_NUM_SIZE);
-  at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, rate, sizeof(float));
+
+  if ((uint32_t*)serial_num_string != 0xFFFFFFFF)
+  {
+       at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, EEPROM_RATE_ADDR, &rate, sizeof(float));
+  }*/
 
   __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE); //М.б. не нужно? Проверить
   __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE); //М.б. не нужно? Проверить
+  
+    if (mode == USB_CHARGING)
+    {
+        ILI9341_FillScreen(ILI9341_BLACK);
+        print_battery();
+    }
+    else ILI9341_FillScreen(ILI9341_WHITE);
+    Calibration();
 
   /* USER CODE END 2 */
 
@@ -229,7 +246,7 @@ int main(void)
                 if (button_released) 
                 {
                     view_time = 0;
-                    HAL_UART_Transmit_IT(&huart2, "AT\r", 3);
+//                    HAL_UART_Transmit_IT(&huart2, "AT\r", 3);
                     
                     ILI9341_FillRectangle(0, 0, 240, 280, ILI9341_WHITE);                            
                     ILI9341_FillRectangle(100, 270, 140, 50, ILI9341_WHITE);                        

@@ -32,7 +32,7 @@ void ILI9341_WriteCommand(uint8_t cmd)
 {
     uint8_t data[]={cmd, 2, 3};
     reset_DC        
-    HAL_SPI_Transmit_DMA(&hspi1, &cmd, sizeof(cmd));
+    HAL_SPI_Transmit(&hspi1, &cmd, sizeof(cmd), 100);
 }
 
 void ILI9341_WriteData(uint8_t* buff, int buff_size) 
@@ -43,7 +43,8 @@ void ILI9341_WriteData(uint8_t* buff, int buff_size)
     while(buff_size > 0) 
     {
         uint16_t chunk_size = buff_size > 32768 ? 32768 : buff_size;
-        HAL_SPI_Transmit_DMA(&hspi1, buff, chunk_size);
+//        HAL_SPI_Transmit_DMA(&hspi1, buff, chunk_size);
+        HAL_SPI_Transmit(&hspi1, buff, chunk_size, 100);
         buff += chunk_size;
         buff_size -= chunk_size;
     }
@@ -311,7 +312,7 @@ void ILI9341_FillRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint1
     {
         for(x = w; x > 0; x--) 
         {
-             HAL_SPI_Transmit_DMA(&hspi1, data, sizeof(data));
+             HAL_SPI_Transmit(&hspi1, data, sizeof(data), 100);
         }
     }
     ILI9341_Unselect();

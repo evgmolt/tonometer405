@@ -100,8 +100,8 @@ int button_pressed_counter = 0;
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern DMA_HandleTypeDef hdma_spi1_tx;
-extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
@@ -246,106 +246,11 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM1 break interrupt and TIM9 global interrupt.
-  */
-void TIM1_BRK_TIM9_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 0 */
-
-  /* USER CODE END TIM1_BRK_TIM9_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim1);
-  /* USER CODE BEGIN TIM1_BRK_TIM9_IRQn 1 */
-    const int pwrkey_down_time = 100;
-    const int ext_up_time = 120;
-    const int pwrkey_up_time = 250;
-    if (lock_counter > 0) lock_counter--;
-    if (show_pressure_counter > 0) show_pressure_counter--;
-
-    process_counter++;
-/*        if (mode == INIT_START || mode == START_SCREEN || mode == PUMPING_MANAGEMENT) 
-    {
-        if (process_counter == pwrkey_down_time) 
-        SIM800_PWRKEY_DOWN;
-    if (process_counter == ext_up_time)      
-        SIM800_EXT_UP;
-    if (process_counter == pwrkey_up_time)   
-        SIM800_PWRKEY_UP;
-        if (process_counter == 300) 
-            send_buf_UART_1("AT",strlen("AT"));            
-    }*/
-    
-    if (heart_counter > 0)
-    {
-        heart_counter--;
-        erase_heart = (heart_counter == 0);
-    }
-        
-    shutdown_counter++;
-    if (shutdown_counter > SHUTDOWN_INTERVAL) 
-    {
-        shutdown_counter = 0;
-#ifndef DEBUG
-        mode = KEY_OFF;                    
-#endif
-    }
-
-    button_touched = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8);
-    if (button_touched) 
-    {
-        button_touched_counter++;
-        if (button_touched_counter > DEBONCE_INTERVAL) button_pressed = 1;
-    }
-    else 
-    {
-        button_touched = 0;
-        button_pressed = 0;
-        button_released = 0;
-        button_touched_counter = 0;
-    }
-    
-    if (button_pressed) 
-    {
-        button_pressed_counter++;
-        shutdown_counter = 0;
-        if (mode == PUMPING_MANAGEMENT) overpumping = true;
-    }
-    else 
-    {
-        if (button_pressed_counter > 0) button_released = 1;
-    }
-
-    if (mode == INIT_START) 
-    {
-        if (button_pressed_counter > GO_TO_TEST_INTERVAL) 
-        {
-            ILI9341_FillScreen(ILI9341_WHITE);
-            HAL_TIM_Base_Stop_IT(&htim1);
-            Calibration();
-            VALVE_FAST_CLOSE;
-            VALVE_SLOW_CLOSE;
-            button_pressed_counter = 0;
-            allow_send_data = 0;
-            mode = PRESSURE_TEST;
-        }
-    }
-    else 
-    {
-        if ((button_pressed_counter > SWITCH_OFF_INTERVAL) && (mode != USB_CHARGING) && (mode != PUMPING_MANAGEMENT)) 
-        {
-            if (!overpumping) mode = KEY_OFF;
-        }
-    }
-
-  /* USER CODE END TIM1_BRK_TIM9_IRQn 1 */
-}
-
-/**
   * @brief This function handles TIM2 global interrupt.
   */
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
@@ -355,6 +260,7 @@ void TIM2_IRQHandler(void)
 
     if (mode == PUMPING_MANAGEMENT)
     {                                                                                                                                                                //////////////////////////////////
+//        HAL_TIM_Base_Stop_IT(&htim2);
         if (GetADCData(true))
         {
             if (main_index<300) 
@@ -416,6 +322,7 @@ void TIM2_IRQHandler(void)
                 mode = START_SCREEN;
             }
         }
+//        HAL_TIM_Base_Start_IT(&htim2);
     }
     else 
     if (mode == MEASUREMENT) 
@@ -532,6 +439,100 @@ void TIM2_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles TIM3 global interrupt.
+  */
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM3_IRQn 0 */
+
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
+    const int pwrkey_down_time = 100;
+    const int ext_up_time = 120;
+    const int pwrkey_up_time = 250;
+    if (lock_counter > 0) lock_counter--;
+    if (show_pressure_counter > 0) show_pressure_counter--;
+
+    process_counter++;
+/*        if (mode == INIT_START || mode == START_SCREEN || mode == PUMPING_MANAGEMENT) 
+    {
+        if (process_counter == pwrkey_down_time) 
+        SIM800_PWRKEY_DOWN;
+    if (process_counter == ext_up_time)      
+        SIM800_EXT_UP;
+    if (process_counter == pwrkey_up_time)   
+        SIM800_PWRKEY_UP;
+        if (process_counter == 300) 
+            send_buf_UART_1("AT",strlen("AT"));            
+    }*/
+    
+    if (heart_counter > 0)
+    {
+        heart_counter--;
+        erase_heart = (heart_counter == 0);
+    }
+        
+    shutdown_counter++;
+    if (shutdown_counter > SHUTDOWN_INTERVAL) 
+    {
+        shutdown_counter = 0;
+#ifndef DEBUG
+        mode = KEY_OFF;                    
+#endif
+    }
+
+    button_touched = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8);
+    if (button_touched) 
+    {
+        button_touched_counter++;
+        if (button_touched_counter > DEBONCE_INTERVAL) button_pressed = 1;
+    }
+    else 
+    {
+        button_touched = 0;
+        button_pressed = 0;
+        button_released = 0;
+        button_touched_counter = 0;
+    }
+    
+    if (button_pressed) 
+    {
+        button_pressed_counter++;
+        shutdown_counter = 0;
+        if (mode == PUMPING_MANAGEMENT) overpumping = true;
+    }
+    else 
+    {
+        if (button_pressed_counter > 0) button_released = 1;
+    }
+
+    if (mode == INIT_START) 
+    {
+        if (button_pressed_counter > GO_TO_TEST_INTERVAL) 
+        {
+            ILI9341_FillScreen(ILI9341_WHITE);
+            HAL_TIM_Base_Stop_IT(&htim3);
+            Calibration();
+            VALVE_FAST_CLOSE;
+            VALVE_SLOW_CLOSE;
+            button_pressed_counter = 0;
+            allow_send_data = 0;
+            mode = PRESSURE_TEST;
+        }
+    }
+    else 
+    {
+        if ((button_pressed_counter > SWITCH_OFF_INTERVAL) && (mode != USB_CHARGING) && (mode != PUMPING_MANAGEMENT)) 
+        {
+            if (!overpumping) mode = KEY_OFF;
+        }
+    }
+
+  /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt.
   */
 void USART1_IRQHandler(void)
@@ -609,6 +610,7 @@ void Calibration()
     uint8_t divisor = 0;
     for (int i = 0; i < aver_size; i++)
     {
+        HAL_Delay(8);
         if (GetADCData(false)) 
         {
             sum += ADS1115_value;

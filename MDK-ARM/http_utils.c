@@ -4,34 +4,36 @@
 #include "usart.h"
 #include "rtc.h"
 
+const char crlf[] = "\r"; //"\r\n"
+
 const char gprs_cont[] = "AT+SAPBR=3,1,\"Contype\",\"GPRS\"";
 const char gprs_apn[] = "AT+SAPBR=3,1,APN,";
-const char gprs_connect[] = "AT+SAPBR=1,1";
-const char gprs_getdata[] = "AT+SAPBR=2,1";
-const char gprs_disconnect[] = "AT+SAPBR=2,1";
+const char gprs_connect[] = "AT+SAPBR=1,1"; //Установка соединения
+const char gprs_getdata[] = "AT+SAPBR=2,1"; //Получение сведений, пока не используется, м.б. надо?
+const char gprs_disconnect[] = "AT+SAPBR=0,1"; //Закрыть соединение
 
 const char http_init[] = "AT+HTTPINIT";
 const char http_cid[] = "AT+HTTPPARA=CID,1";
-const char http_url[] = "AT+HTTPPARA=\"URL\","; //"http://bp-technopark.mdapp.online/api/v3/users/login"
+const char http_url[] = "AT+HTTPPARA=\"URL\","; 
 const char http_content_plain[] = "AT+HTTPPARA=\"CONTENT\",\"text/plain\"";
 const char http_content_json[] = "AT+HTTPPARA=\"CONTENT\",\"application/json\"";
 const char http_token[] = "AT+HTTPPARA=\"USERDATA\",\"Authorization:Bearer \""; // здесь токен вроде бы
-const char http_len[] = "AT+HTTPDATA="; //Длина строки, время ожидания
-//{"app.username":"102@samsmu.ru","app.password":"aTXGZYqFhs"}
-const char http_post[] = "AT+HTTPACTION=1";
-const char http_read[] = "AT+HTTPREAD";
-const char http_term[] = "AT+HTTPTERM";
+const char http_len[] = "AT+HTTPDATA="; //Размер передаваемых данных (body), время ожидания
+//Здесь передается тело запроса: {"app.username":"102@samsmu.ru","app.password":"aTXGZYqFhs"}
+const char http_post[] = "AT+HTTPACTION=1"; //POST запрос
+const char http_read[] = "AT+HTTPREAD"; //Читаем, что ответит сервер
+const char http_term[] = "AT+HTTPTERM"; //Закрывает соединение
 
-char common_buf[BUF_LEN];
+char common_buf[BUF_LEN]; //Буфер общего назначения
 
 const char login_route[] = "/api/v3/users/login";
 const char measurement_route[] = "/api/v3/data/measurements?person_id=";
 
-char token[BUF_LEN];
-char patient_id[10];
+char token[BUF_LEN]; 
+char patient_id[6];
 char login_body[BUF_LEN];
-char measurement_body[LONG_BUF_LEN];
 
+//Данные, считываемые из EEPROM
 char e_login[EEPROM_CELL_SIZE];
 char e_pass[EEPROM_CELL_SIZE];
 char e_url[EEPROM_CELL_SIZE];
@@ -42,55 +44,53 @@ uint8_t SendResultHttp(uint16_t p_sys, uint16_t p_dia, uint16_t pulse)
     if (InitGprs() != HAL_OK) return HAL_ERROR;
     if (SendLogin() != HAL_OK) return HAL_ERROR;
     uint16_t size;
-    for (int i = 0; i < sizeof(common_buf); i++) common_buf[i] = 0;
-    if (HAL_UARTEx_ReceiveToIdle(&huart2, common_buf, sizeof(common_buf), size, RECEIVE_TIMEOUT) != HAL_OK) return HAL_ERROR; //Получаем ответ сервера
-    if (GetToken(common_buf) == 0) return HAL_ERROR; //Извлекаем токен
-    if (GetPatientId(common_buf) == 0) return HAL_ERROR; //Извлекаем ID
+	memset(common_buf, 0, LONG_BUF_LEN);
+    if (HAL_UARTEx_ReceiveToIdle(&huart2, common_buf, LONG_BUF_LEN, size, RECEIVE_TIMEOUT) != HAL_OK) return HAL_ERROR; //Получаем ответ сервера
+    if (GetValueFromJSON(common_buf, "security.access_token\": \"", token) == 0) return HAL_ERROR; //Извлекаем токен в буфер token
+    if (GetValueFromJSON(common_buf, "app.object.id\": \"", patient_id) == 0) return HAL_ERROR; //Извлекаем ID в буфер patient_id
+	memset(common_buf, 0, LONG_BUF_LEN);
 	sprintf(common_buf, "%s\"%s%s%s\"", http_url, e_url, measurement_route, patient_id);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_content_json);
+    if (SendDataWaitOk(http_content_json) != HAL_OK) return HAL_ERROR;
+	memset(common_buf, 0, LONG_BUF_LEN);
+	sprintf(common_buf, "%s%s\"", http_token, token); //Нужны ли кавычки между Bearer и началом токена?
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_token);
-    strcat(common_buf, token);
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
+    //Читаем текущее время и дату
     RTC_TimeTypeDef sTime = {0};
     HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
     RTC_DateTypeDef sDate = {0};
     HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
-    CreateMeasurementBody(atoi(patient_id), p_sys, p_dia, pulse, sTime, sDate);
-    if (SendDataWaitOk(measurement_body) != HAL_OK) return HAL_ERROR;
+    memset(common_buf, 0, LONG_BUF_LEN);
+    CreateMeasurementBody(common_buf, atoi(patient_id), p_sys, p_dia, pulse, sTime, sDate);
+    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
     if (SendDataWaitOk(http_post) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_term); //закрываем http
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;    
-    strcpy(common_buf, gprs_disconnect); //закрываем gprs
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;    
+    if (SendDataWaitOk(http_term) != HAL_OK) return HAL_ERROR;  //закрываем http  
+    if (SendDataWaitOk(gprs_disconnect) != HAL_OK) return HAL_ERROR;   //закрываем gprs  
     return HAL_OK;
 }
 
 uint8_t InitGprs()
 {
-    strcpy(common_buf, gprs_cont);
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-     ReadFromEEPROM();
+    ReadFromEEPROM();
+    if (SendDataWaitOk(gprs_cont) != HAL_OK) return HAL_ERROR;
+	memset(common_buf, 0, LONG_BUF_LEN);
 	sprintf(common_buf, "%s\"%s\"", gprs_apn, e_point);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, gprs_connect);
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
+    if (SendDataWaitOk(gprs_connect) != HAL_OK) return HAL_ERROR;
     return HAL_OK;
 }
 
 uint8_t SendLogin()
 {
-    strcpy(common_buf, http_init);
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_cid);
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    ReadFromEEPROM();
+    if (SendDataWaitOk(http_init) != HAL_OK) return HAL_ERROR;
+    if (SendDataWaitOk(http_cid) != HAL_OK) return HAL_ERROR;
+	memset(common_buf, 0, LONG_BUF_LEN);
 	sprintf(common_buf, "%s\"%s%s\"", http_url, e_url, login_route);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
-    strcpy(common_buf, http_content_json); // plain??
-    if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
+    if (SendDataWaitOk(http_content_json) != HAL_OK) return HAL_ERROR;
+	memset(login_body, 0, BUF_LEN);
     CreateLoginBody(login_body);
+	memset(common_buf, 0, LONG_BUF_LEN);
     sprintf(common_buf, "%s%d%s", http_len, strlen(login_body), WAIT_TIME);
     if (SendDataWaitOk(common_buf) != HAL_OK) return HAL_ERROR;
     if (SendDataWaitOk(login_body) != HAL_OK) return HAL_ERROR;
@@ -106,11 +106,6 @@ void ReadFromEEPROM()
     at24_HAL_ReadBytes(&hi2c1, EEPROM_BASE_ADDR, F_POINT * EEPROM_CELL_SIZE, e_point, EEPROM_CELL_SIZE);
 }
 
-void CreateTokenString()
-{
-    strcpy(common_buf, http_token);
-    strncat(common_buf, token, BUF_LEN);
-}
 
 int CreateLoginBody(char* buf)
 {
@@ -120,13 +115,13 @@ int CreateLoginBody(char* buf)
 	return jwClose();
 }
 
-int CreateMeasurementBody(int id, int sys, int dia, int pulse, RTC_TimeTypeDef sTime, RTC_DateTypeDef sDate)
+int CreateMeasurementBody(char* buf, int id, int sys, int dia, int pulse, RTC_TimeTypeDef sTime, RTC_DateTypeDef sDate)
 {
 	int err;
 
 	int string_buff[20] = { 0 };
 
-	jwOpen(measurement_body, LONG_BUF_LEN, JW_ARRAY, JW_PRETTY);
+	jwOpen(buf, LONG_BUF_LEN, JW_ARRAY, JW_PRETTY);
 	jwArr_object();
 	sprintf(string_buff, "%d", id);
 	jwObj_string("ownerId", string_buff);
@@ -137,7 +132,7 @@ int CreateMeasurementBody(int id, int sys, int dia, int pulse, RTC_TimeTypeDef s
 	jwObj_object("extraParams");
 	jwObj_string("app.comment", "");
 	jwEnd();
-	sprintf(string_buff, "%d-%02d-%02dT%02d:%02d:%02d", sDate.Year, sDate.Month, sDate.Date, sTime.Hours, sTime.Minutes, sTime.Seconds);
+	sprintf(string_buff, "%d-%02d-%02dT%02d:%02d:%02d", 2000 + sDate.Year, sDate.Month, sDate.Date, sTime.Hours, sTime.Minutes, sTime.Seconds);
 	jwObj_string("datetime", string_buff);
 	jwEnd();
 
@@ -151,34 +146,24 @@ int CreateMeasurementBody(int id, int sys, int dia, int pulse, RTC_TimeTypeDef s
 	jwObj_object("extraParams");
 	jwObj_string("app.comment", "");
 	jwEnd();
-	jwObj_string("datetime", "2022-10-12T09:30:05");
+	sprintf(string_buff, "%d-%02d-%02dT%02d:%02d:%02d", 2000 + sDate.Year, sDate.Month, sDate.Date, sTime.Hours, sTime.Minutes, sTime.Seconds);
 	jwEnd();
 	err = jwClose();
 	//Если нужно добавить { в начало и } в конец. 
 /*	ind = 0;
-	while (measurement_body[ind] != 0) ind++;
+	while (buf[ind] != 0) ind++;
 	for (int i = 0; i <= ind; i++)
 	{
 		measurement_body[ind - i + 3] = measurement_body[ind - i];
 	}
-	measurement_body[0] = '{';
-	measurement_body[1] = 0x0D;
-	measurement_body[2] = 0x0A;
-	measurement_body[ind + 3] = 0x0D;
-	measurement_body[ind + 4] = 0x0A;
-	measurement_body[ind + 5] = '}';
-	measurement_body[ind + 6] = 0;*/
+	buf[0] = '{';
+	buf[1] = 0x0D;
+	buf[2] = 0x0A;
+	buf[ind + 3] = 0x0D;
+	buf[ind + 4] = 0x0A;
+	buf[ind + 5] = '}';
+	buf[ind + 6] = 0;*/
     return err;
-}
-
-uint16_t GetToken(char* json)
-{
-    return GetValueFromJSON(json, "security.access_token\": \"", token);
-}
-
-uint16_t GetPatientId(char* json)
-{
-    return GetValueFromJSON(json, "app.object.id\": \"", patient_id);
 }
 
 uint16_t GetValueFromJSON(char* json, char* string_to_find, char* value)
@@ -194,12 +179,13 @@ uint16_t GetValueFromJSON(char* json, char* string_to_find, char* value)
 		value[index] = json[pos];
 		pos++;
 		index++;
-		if (index > 1024) return 0;
+		if (index > LONG_BUF_LEN) return 0;
 	}
 	value[index] = 0;
 	return index;
 }
 
+//Возвращает индекс конца string_to_find в buff
 uint16_t FindIndex(char* buff, char* string_to_find)
 {
 	uint16_t ind = 0;
@@ -224,8 +210,10 @@ uint16_t FindIndex(char* buff, char* string_to_find)
 
 uint8_t SendDataWaitOk(char* buff)
 {
+    strcat(buff, crlf); //Если нужно  Carriage Return Line Feed для SIM800 (проверить);
     HAL_UART_Transmit(&huart2, buff, strlen(buff), TRANSMIT_TIMEOUT);
-    uint8_t result = HAL_UART_Receive(&huart2, buff, strlen("OK"), RECEIVE_TIMEOUT);
-    if (strcmp(buff, "OK") == 0) return result;
+    uint16_t size;
+    uint8_t result = HAL_UARTEx_ReceiveToIdle(&huart2, common_buf, LONG_BUF_LEN, size, RECEIVE_TIMEOUT);
+    if (FindIndex(buff, "OK") > 0) return result;
     return HAL_ERROR;
 }
